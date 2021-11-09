@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Poggioli/graphql-study#readme",
   "devDependencies": {
+    "@types/node": "^16.11.7",
     "typescript": "4.4.4"
   }
 }
