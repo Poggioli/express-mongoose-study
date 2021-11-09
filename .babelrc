@@ -1,0 +1,19 @@
+{
+    "presets": [
+        "@babel/preset-env", 
+        "@babel/preset-typescript"
+    ],
+    "ignore": [
+        "**/*.spec.ts",
+        "**/*.yaml",
+        "**/*.yml"
+    ],
+    "plugins": [
+        [
+            "module-resolver", 
+            {
+                "alias": { }
+            }
+        ]
+    ]
+}
