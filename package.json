@@ -6,6 +6,8 @@
   "scripts": {
     "start:dev": "nodemon",
     "build": "rimraf ./dist && babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,7 +26,12 @@
     "@babel/preset-env": "7.16.0",
     "@babel/preset-typescript": "7.16.0",
     "@types/node": "16.11.7",
+    "@typescript-eslint/eslint-plugin": "5.3.1",
+    "@typescript-eslint/parser": "5.3.1",
     "babel-plugin-module-resolver": "4.1.0",
+    "eslint": "8.2.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.25.2",
     "nodemon": "2.0.15",
     "rimraf": "3.0.2",
     "ts-node": "10.4.0",
