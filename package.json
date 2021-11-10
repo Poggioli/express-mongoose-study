@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node dist/index.js",
-    "start:dev": "nodemon",
+    "start": "export NODE_ENV=prod && npm run build && node dist/index.js",
+    "start:dev": "export NODE_ENV=dev && nodemon",
     "build": "npm run lint:fix && npm run babel",
     "babel": "rimraf ./dist && babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "clear-test": "rimraf ./coverage/ jest_html_reporters.html junit.xml",
-    "test": "npm run clear-test && jest --coverage --no-cache --forceExit --silent --passWithNoTests --detectOpenHandles",
-    "test:no-silent": "npm run clear-test && jest --coverage --no-cache --forceExit --passWithNoTests --detectOpenHandles"
+    "test": "export NODE_ENV=test && npm run clear-test && jest --no-cache --forceExit --silent --detectOpenHandles",
+    "test:no-silent": "export NODE_ENV=test && npm run clear-test && jest --no-cache --forceExit --detectOpenHandles"
   },
   "repository": {
     "type": "git",

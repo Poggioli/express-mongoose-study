@@ -1,4 +1,8 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+const { pathsToModuleNameMapper } = require('ts-jest/utils')
+// eslint-disable-next-line import/extensions
+const { compilerOptions } = require('./tsconfig.json')
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -7,6 +11,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   testTimeout: 10000,
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' }),
   modulePathIgnorePatterns: [
     'node_modules',
     'dist',
@@ -25,7 +30,6 @@ module.exports = {
     'docker',
     'logs',
     'swagger*',
-    'application.ts',
     'environment.ts',
     'tests'
   ],
@@ -41,9 +45,6 @@ module.exports = {
     'jest-html-reporters'
   ],
   testResultsProcessor: 'jest-sonar-reporter',
-  globals: {
-    address: 'http://localhost:3012'
-  },
   testMatch: [
     '**/tests/**/*.(test|spec).+(ts)'
   ],

@@ -5,26 +5,25 @@ import helmet from 'helmet'
 import actuator from 'express-actuator'
 import compression from 'compression'
 import morgan from 'morgan'
+import { Server } from 'http'
 import environment from './environment'
 
-interface ServerException extends Error {
-  errno?: string;
-  code?: string;
-  port?: number;
-}
-
-class Server {
+class Application {
   private readonly CORS_POLICY = '*'
 
   private readonly IS_CASE_SENSITIVE_ROUTING = true
 
-  private app: express.Express
+  private _app: express.Express
+
+  private _server: Server = new Server()
+
+  private _isRunning: boolean = false
 
   constructor() {
-    this.app = express()
+    this._app = express()
   }
 
-  public bootstrap(): Promise<Server> {
+  public bootstrap(): Promise<Application> {
     return this.configPort()
       .then(() => this.configEnvironment())
       .then(() => this.configMiddlewares())
@@ -32,17 +31,31 @@ class Server {
       .then(() => this.listening())
   }
 
+  public shutdown(): void {
+    if (this.isRunning()) {
+      this._isRunning = false
+      logger.info('Server is shutdown')
+      this._server.close()
+    }
+  }
+
+  public isRunning(): boolean {
+    return this._isRunning
+  }
+
   private listening(): Promise<any> {
-    return new Promise((resolve) => {
-      const { port } = environment.app
-      this.app.listen(port, () => {
-        const bootstrapMsg = `${environment.app.name} running on port ${port}`
-        logger.info(bootstrapMsg)
-      }).on('error', (err: ServerException) => {
+    return new Promise((resolve, reject) => {
+      const { port, name } = environment.app
+      this._server = this._app.listen(port, () => {
+        logger.info(`${name} running on port ${port}`)
+        this._isRunning = true
+        resolve(this._app)
+      }).on('error', (err) => {
         logger.info(err.message)
-        process.exit(1)
+        this._isRunning = false
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject(this)
       })
-      resolve(this.app)
     })
   }
 
@@ -50,8 +63,8 @@ class Server {
     return new Promise((resolve) => {
       const { port } = environment.app
       logger.info(`Loading application with port: ${port}`)
-      this.app.set('port', port)
-      resolve(this.app)
+      this._app.set('port', port)
+      resolve(this._app)
     })
   }
 
@@ -59,45 +72,46 @@ class Server {
     return new Promise((resolve) => {
       const { node } = environment
       logger.info(`Loading application with Environment: ${node}`)
-      this.app.set('env', node)
-      resolve(this.app)
+      this._app.set('env', node)
+      resolve(this._app)
     })
   }
 
   private configMiddlewares(): Promise<any> {
     return new Promise((resolve) => {
       logger.info(`Configuring Case Sensitive Rounting to: ${this.IS_CASE_SENSITIVE_ROUTING}`)
-      this.app.set('case sensitive routing', this.IS_CASE_SENSITIVE_ROUTING)
+      this._app.set('case sensitive routing', this.IS_CASE_SENSITIVE_ROUTING)
 
       logger.info(`Configuring CORS with policy: ${this.CORS_POLICY}`)
-      this.app.use(cors({ origin: this.CORS_POLICY }))
+      this._app.use(cors({ origin: this.CORS_POLICY }))
 
       logger.info('Configuring Middlewares: BodyParsers')
-      this.app.use(express.urlencoded({ extended: false }))
-      this.app.use(express.json())
+      this._app.use(express.urlencoded({ extended: false }))
+      this._app.use(express.json())
 
       logger.info('Configuring Middlewares: Helmet')
-      this.app.use(helmet())
+      this._app.use(helmet())
 
       logger.info('Configuring Middlewares: Actuator')
-      this.app.use(actuator())
+      this._app.use(actuator())
 
       logger.info('Configuring Middlewares: Compression')
-      this.app.use(compression())
+      this._app.use(compression())
 
-      resolve(this.app)
+      resolve(this._app)
     })
   }
 
   private configMorgan(): Promise<any> {
     return new Promise((resolve) => {
-      this.app.use(morgan(
+      logger.info('Configuring Morgan')
+      this._app.use(morgan(
         '{"date": ":date[clf]", "method": ":method", "url": ":url", "status": ":status"}',
         { stream: { write: (msg: string) => { logger.info(msg) } } }
       ))
-      resolve(this.app)
+      resolve(this._app)
     })
   }
 }
 
-export default Server
+export default Application

@@ -6,7 +6,7 @@ import * as pkg from '../package.json'
 const environment = {
   node: process.env.NODE_ENV || 'dev',
   app: {
-    port: 3001,
+    port: config.get('app.port'),
     name: pkg.name
   },
   log: {

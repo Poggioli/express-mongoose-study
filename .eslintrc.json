@@ -41,6 +41,7 @@
         }
       }
     ],
+    "no-underscore-dangle": "off",
     "comma-spacing": 2,
     "comma-dangle": ["error", "never"],
     "no-unused-vars": "off",
