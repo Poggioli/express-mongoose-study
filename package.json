@@ -9,8 +9,9 @@
     "babel": "rimraf ./dist && babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "test": "jest --coverage --no-cache --forceExit --silent --passWithNoTests --detectOpenHandles",
-    "test:no-silent": "jest --coverage --no-cache --forceExit --passWithNoTests --detectOpenHandles"
+    "clear-test": "rimraf ./coverage/ jest_html_reporters.html junit.xml",
+    "test": "npm run clear-test && jest --coverage --no-cache --forceExit --silent --passWithNoTests --detectOpenHandles",
+    "test:no-silent": "npm run clear-test && jest --coverage --no-cache --forceExit --passWithNoTests --detectOpenHandles"
   },
   "repository": {
     "type": "git",
