@@ -1,0 +1,6 @@
+log:
+  level: debug
+  output: "/logs"
+  fileName: "log-"
+  maxFileSize: 10
+  maxFiles: 10

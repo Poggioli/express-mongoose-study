@@ -1,20 +1,15 @@
 {
-    "presets": [
-        "@babel/preset-env", 
-        "@babel/preset-typescript",
-        "minify"
-    ],
-    "ignore": [
-        "**/*.spec.ts",
-        "**/*.yaml",
-        "**/*.yml"
-    ],
-    "plugins": [
-        [
-            "module-resolver", 
-            {
-                "alias": { }
-            }
-        ]
+  "presets": ["@babel/preset-env", "@babel/preset-typescript", "minify"],
+  "ignore": ["**/*.spec.ts", "**/*.yaml", "**/*.yml"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@infra": "./src/core/infra",
+          "@src": "./src"
+        }
+      }
     ]
+  ]
 }

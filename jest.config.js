@@ -12,11 +12,11 @@ module.exports = {
     'dist',
     'coverage',
     'docker',
-    'logs',
+    'logs'
   ],
   moduleDirectories: [
     '<rootDir>/src',
-    'node_modules',
+    'node_modules'
   ],
   coveragePathIgnorePatterns: [
     'node_modules',
@@ -27,25 +27,25 @@ module.exports = {
     'swagger*',
     'application.ts',
     'environment.ts',
-    'tests',
+    'tests'
   ],
   coverageReporters: [
     'text',
     'cobertura',
     'html',
-    'lcov',
+    'lcov'
   ],
   reporters: [
     'default',
     'jest-junit',
-    'jest-html-reporters',
+    'jest-html-reporters'
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   globals: {
-    address: 'http://localhost:3012',
+    address: 'http://localhost:3012'
   },
   testMatch: [
-    '**/tests/**/*.(test|spec).+(ts)',
+    '**/tests/**/*.(test|spec).+(ts)'
   ],
   moduleFileExtensions: [
     'ts',
@@ -53,6 +53,6 @@ module.exports = {
     'js',
     'jsx',
     'json',
-    'node',
-  ],
-};
+    'node'
+  ]
+}
