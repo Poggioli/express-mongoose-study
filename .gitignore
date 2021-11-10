@@ -21,6 +21,7 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+test-report.xml
 
 # nyc test coverage
 .nyc_output
@@ -110,3 +111,5 @@ dist
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+jest_html_reporters.html
+junit.xml

@@ -9,7 +9,8 @@
     "babel": "rimraf ./dist && babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage --no-cache --forceExit --silent --passWithNoTests --detectOpenHandles",
+    "test:no-silent": "jest --coverage --no-cache --forceExit --passWithNoTests --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "@babel/core": "7.16.0",
     "@babel/preset-env": "7.16.0",
     "@babel/preset-typescript": "7.16.0",
+    "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
@@ -33,11 +35,18 @@
     "babel-preset-minify": "0.5.1",
     "eslint": "8.2.0",
     "eslint-config-airbnb-base": "15.0.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "2.25.2",
     "husky": "7.0.4",
+    "jest": "27.3.1",
+    "jest-html-reporters": "^2.1.6",
+    "jest-junit": "^13.0.0",
+    "jest-sonar-reporter": "^2.0.0",
     "lint-staged": "11.2.6",
     "nodemon": "2.0.15",
     "rimraf": "3.0.2",
+    "ts-jest": "27.0.7",
     "ts-node": "10.4.0",
     "typescript": "4.4.4"
   }
