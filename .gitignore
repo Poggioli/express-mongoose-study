@@ -113,3 +113,4 @@ dist
 *.code-workspace
 jest_html_reporters.html
 junit.xml
+mongoDB/*
