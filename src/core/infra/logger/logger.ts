@@ -6,6 +6,7 @@ const output = environment.log.output as string
 const fileName = environment.log.fileName as string
 const maxFileSize = environment.log.maxFileSize as number
 const maxFiles = environment.log.maxFiles as number
+const isTestEnv: boolean = environment.node === 'test'
 
 const logger = winston.createLogger({
   transports: [
@@ -34,5 +35,11 @@ logger.add(
     level: 'debug'
   })
 )
+
+if (isTestEnv) {
+  logger.silent = true
+} else {
+  logger.silent = false
+}
 
 export default logger
