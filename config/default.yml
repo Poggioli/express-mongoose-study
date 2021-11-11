@@ -8,3 +8,8 @@ log:
   maxFiles: 10
 auth:
   jwtSecret: "62C434DA057CA88896F7AA31F606841D4E19953D28EBF3CD766502EAC6695933"
+db:
+  useAuth: false
+  url: mongodb://localhost:27017
+  username: root
+  password: root123

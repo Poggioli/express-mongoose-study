@@ -6,6 +6,7 @@ import compression from 'compression'
 import morgan from 'morgan'
 import { Server } from 'http'
 import helmet from 'helmet'
+import mongoose from 'mongoose'
 import environment from './environment'
 
 class Application {
@@ -24,7 +25,8 @@ class Application {
   }
 
   public bootstrap(): Promise<Application> {
-    return this.configPort()
+    return this.initDatabase()
+      .then(() => this.configPort())
       .then(() => this.configEnvironment())
       .then(() => this.configMiddlewares())
       .then(() => this.configMorgan())
@@ -110,6 +112,26 @@ class Application {
         { stream: { write: (msg: string) => { logger.info(msg) } } }
       ))
       resolve(this._app)
+    })
+  }
+
+  private getUrlDatabase(): string {
+    return environment.db.url as string
+  }
+
+  private initDatabase(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      logger.info('Connecting to database')
+      mongoose.connect(this.getUrlDatabase())
+      const db = mongoose.connection
+      db.on('error', (err) => {
+        logger.info(`Error to connect to database: ${err}`)
+        reject()
+      })
+      db.on('connected', () => {
+        logger.info('Connected to database')
+        resolve(this._app)
+      })
     })
   }
 }
