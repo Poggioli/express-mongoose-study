@@ -1,11 +1,11 @@
 import logger from '@infra/logger'
 import express from 'express'
 import cors from 'cors'
-import helmet from 'helmet'
 import actuator from 'express-actuator'
 import compression from 'compression'
 import morgan from 'morgan'
 import { Server } from 'http'
+import helmet from 'helmet'
 import environment from './environment'
 
 class Application {

@@ -15,6 +15,9 @@ const environment = {
     fileName: config.get('log.fileName'),
     maxFileSize: config.get('log.maxFileSize'),
     maxFiles: config.get('log.maxFiles')
+  },
+  auth: {
+    jwtSecret: process.env.JWT_SECRET || config.get('auth.jwtSecret')
   }
 }
 
