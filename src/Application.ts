@@ -116,7 +116,14 @@ class Application {
   }
 
   private getUrlDatabase(): string {
-    return environment.db.url as string
+    const {
+      url, username, password, useAuth
+    } = environment.db
+    let finalUrl: string = url as string
+    if (useAuth) {
+      finalUrl = finalUrl.replace(/{username}/, username as string).replace(/{password}/, password as string)
+    }
+    return finalUrl
   }
 
   private initDatabase(): Promise<any> {

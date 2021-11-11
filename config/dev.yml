@@ -1,2 +1,7 @@
 app:
   port: 3001
+db:
+  useAuth: true
+  url: mongodb://{username}:{password}@localhost:27017/graphql
+  username: graphql
+  password: graphql
