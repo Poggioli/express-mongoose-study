@@ -1,12 +1,12 @@
 import logger from '@infra/logger'
-import express from 'express'
-import cors from 'cors'
-import actuator from 'express-actuator'
 import compression from 'compression'
-import morgan from 'morgan'
-import { Server } from 'http'
+import cors from 'cors'
+import express from 'express'
+import actuator from 'express-actuator'
 import helmet from 'helmet'
+import { Server } from 'http'
 import mongoose from 'mongoose'
+import morgan from 'morgan'
 import environment from './environment'
 
 class Application {
@@ -16,15 +16,11 @@ class Application {
 
   private _app: express.Express
 
-  private _server: Server = new Server()
-
-  private _isRunning: boolean = false
-
   constructor() {
     this._app = express()
   }
 
-  public bootstrap(): Promise<Application> {
+  public async bootstrap(): Promise<Server> {
     return this.initDatabase()
       .then(() => this.configPort())
       .then(() => this.configEnvironment())
@@ -33,32 +29,9 @@ class Application {
       .then(() => this.listening())
   }
 
-  public shutdown(): void {
-    if (this.isRunning()) {
-      this._isRunning = false
-      logger.info('Server is shutdown')
-      this._server.close()
-    }
-  }
-
-  public isRunning(): boolean {
-    return this._isRunning
-  }
-
-  private listening(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const { port, name } = environment.app
-      this._server = this._app.listen(port, () => {
-        logger.info(`${name} running on port ${port}`)
-        this._isRunning = true
-        resolve(this._app)
-      }).on('error', (err) => {
-        logger.info(err.message)
-        this._isRunning = false
-        // eslint-disable-next-line prefer-promise-reject-errors
-        reject(this)
-      })
-    })
+  private listening(): Server {
+    const { port } = environment.app
+    return this._app.listen(port)
   }
 
   private configPort(): Promise<any> {
@@ -128,17 +101,19 @@ class Application {
 
   private initDatabase(): Promise<any> {
     return new Promise((resolve, reject) => {
-      logger.info('Connecting to database')
-      mongoose.connect(this.getUrlDatabase())
-      const db = mongoose.connection
-      db.on('error', (err) => {
-        logger.info(`Error to connect to database: ${err}`)
-        reject()
-      })
-      db.on('connected', () => {
-        logger.info('Connected to database')
-        resolve(this._app)
-      })
+      try {
+        logger.info('Connecting to database')
+        mongoose.connect(this.getUrlDatabase())
+          .then(() => {
+            logger.info('Connected to database')
+            resolve(this._app)
+          }, (err) => {
+            logger.error(`Error to connect to database: ${err}`)
+            reject(err)
+          })
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 }

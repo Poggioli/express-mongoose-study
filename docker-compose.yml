@@ -2,8 +2,12 @@ version: "3.3"
 services:
   mongoDB:
     image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootPass1234
+      MONGO_INITDB_DATABASE: graphql
     ports:
       - "27017:27017"
     volumes:
-      - ./mongoDB:/data/db
-    command: [--auth]
+      - "./mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+    command: mongod
