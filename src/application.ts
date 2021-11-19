@@ -20,16 +20,15 @@ class Application {
     this._app = express()
   }
 
-  public async bootstrap(): Promise<Server> {
+  public async bootstrap(): Promise<this> {
     return this.initDatabase()
       .then(() => this.configPort())
       .then(() => this.configEnvironment())
       .then(() => this.configMiddlewares())
       .then(() => this.configMorgan())
-      .then(() => this.listening())
   }
 
-  private listening(): Server {
+  public listening(): Server {
     const { port } = environment.app
     return this._app.listen(port)
   }
@@ -39,7 +38,7 @@ class Application {
       const { port } = environment.app
       logger.info(`Loading application with port: ${port}`)
       this._app.set('port', port)
-      resolve(this._app)
+      resolve(this)
     })
   }
 
@@ -48,7 +47,7 @@ class Application {
       const { node } = environment
       logger.info(`Loading application with Environment: ${node}`)
       this._app.set('env', node)
-      resolve(this._app)
+      resolve(this)
     })
   }
 
@@ -73,7 +72,7 @@ class Application {
       logger.info('Configuring Middlewares: Compression')
       this._app.use(compression())
 
-      resolve(this._app)
+      resolve(this)
     })
   }
 
@@ -84,7 +83,7 @@ class Application {
         '{"date": ":date[clf]", "method": ":method", "url": ":url", "status": ":status"}',
         { stream: { write: (msg: string) => { logger.info(msg) } } }
       ))
-      resolve(this._app)
+      resolve(this)
     })
   }
 
@@ -102,11 +101,11 @@ class Application {
   private initDatabase(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        logger.info('Connecting to database')
+        logger.info('Trying to database')
         mongoose.connect(this.getUrlDatabase())
           .then(() => {
             logger.info('Connected to database')
-            resolve(this._app)
+            resolve(this)
           }, (err) => {
             logger.error(`Error to connect to database: ${err}`)
             reject(err)
