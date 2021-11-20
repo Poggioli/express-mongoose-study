@@ -11,8 +11,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "clear-test": "rimraf ./coverage/ jest_html_reporters.html junit.xml",
-    "test": "export NODE_ENV=test && npm run clear-test && jest --coverage --no-cache --forceExit --silent --detectOpenHandles",
-    "test:no-silent": "export NODE_ENV=test && npm run clear-test && jest --coverage --no-cache --forceExit --detectOpenHandles"
+    "test": "export NODE_ENV=test && npm run clear-test && jest --runInBand --coverage --no-cache --forceExit --silent --detectOpenHandles",
+    "test:no-silent": "export NODE_ENV=test && npm run clear-test && jest --runInBand --coverage --no-cache --forceExit --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -54,6 +54,7 @@
     "jest-junit": "13.0.0",
     "jest-sonar-reporter": "2.0.0",
     "lint-staged": "11.2.6",
+    "mongodb-memory-server": "^8.0.2",
     "nodemon": "2.0.15",
     "rimraf": "3.0.2",
     "ts-jest": "27.0.7",

@@ -1,5 +1,5 @@
 import {
-  Document, model, ObjectId, Schema
+  Document, Model, model, ObjectId, Schema
 } from 'mongoose'
 
 export interface ItemInterface extends Document {
@@ -35,5 +35,5 @@ const itemSchema = new Schema({
   }
 })
 
-const Item = model<ItemInterface>('Item', itemSchema)
+const Item: Model<ItemInterface> = model<ItemInterface>('Item', itemSchema)
 export default Item

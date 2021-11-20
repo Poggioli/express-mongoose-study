@@ -12,7 +12,9 @@
     "outDir": "dist",
     "paths": {
       "@infra/*": ["./src/core/infra/*"],
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@models": ["./src/core/models/index.ts"],
+      "@repositories": ["./src/core/repositories/index.ts"]
     },
     "removeComments": true,
     "resolveJsonModule": true,
