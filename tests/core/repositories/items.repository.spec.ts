@@ -20,7 +20,7 @@ describe('ItemsRepository', () => {
   afterAll(async () => { await db.disconnect() })
 
   describe('FindAll method', () => {
-    it(`Should return an ItemInterface[]
+    it(`Should return an Item[]
         When call findAll`, async () => {
       const result = await repository.findAll()
       expect(result).toStrictEqual([])
@@ -100,7 +100,7 @@ describe('ItemsRepository', () => {
   })
 
   describe('FindById method', () => {
-    it(`Should return an ItemInterface
+    it(`Should return an Item
         When call findById
         With description, name and price saved before`, async () => {
       const item: any = {
@@ -115,6 +115,20 @@ describe('ItemsRepository', () => {
       expect(result.price).toBe(1)
       expect(result.createdAt).toBeInstanceOf(Date)
       expect(result.updatedAt).toBeInstanceOf(Date)
+    })
+
+    it(`Should return null
+        When call findById
+        With an invalid ObjectId`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      await repository.insert(item)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const result: Item = await repository.findById(id)
+      expect(result).toBeNull()
     })
   })
 })
