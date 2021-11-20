@@ -109,7 +109,7 @@ describe('ItemsRepository', () => {
         description: 'description'
       }
       const id = await repository.insert(item)
-      const result: Item = await repository.findById(id)
+      const result: Item = await repository.findById(id) as Item
       expect(result.description).toBe('description')
       expect(result.name).toBe('name')
       expect(result.price).toBe(1)
@@ -127,7 +127,7 @@ describe('ItemsRepository', () => {
       }
       await repository.insert(item)
       const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: Item = await repository.findById(id)
+      const result: Item | null = await repository.findById(id)
       expect(result).toBeNull()
     })
   })

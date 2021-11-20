@@ -10,7 +10,7 @@ export default class ItemsRepository {
 
   public findAll = async (): Promise<Item[]> => this.model.find().then()
 
-  public findById = async (id: mongoose.Types.ObjectId): Promise<Item> => this.model.findById(id).then()
+  public findById = async (id: mongoose.Types.ObjectId): Promise<Item | null> => this.model.findById(id).then()
 
   public insert = async (value: Item): Promise<mongoose.Types.ObjectId> => {
     const document: Item = new ItemModel(value)
