@@ -1,3 +1,3 @@
-import ItemsRepository from './items.repositories'
+import ItemsRepository from './items.repository'
 
 export default ItemsRepository
