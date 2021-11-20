@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import ItemsRepository from '@repositories'
 import { Item } from '@src/core/models'
 import { NextFunction, Request, Response } from 'express'
@@ -26,5 +27,31 @@ export default class ItemsService {
     return this.repository.findById(finalId)
       .then((item: Item | null) => (item ? resp.status(200).json(item) : resp.status(404).json('Document not found')))
       .catch((err) => { resp.status(500).json(err.message) })
+  }
+
+  public async insert(req: Request, resp: Response, next: NextFunction): Promise<void | Response> {
+    const value: Partial<Item> = this.mapperRequestToItemInterface(req.body)
+    return this.repository.insert(value as Item)
+      .then((_id: mongoose.Types.ObjectId) => resp.status(201).json(_id.toString()))
+      .catch((err) => {
+        let statusCode!: number
+        let messages: any
+        if (err.name === 'ValidationError') {
+          messages = []
+          Object.keys(err.errors).forEach((key) => {
+            messages.push(err.errors[key].message)
+          })
+          statusCode = 422
+        }
+        resp.status(statusCode || 500).json(messages || err.message)
+      })
+  }
+
+  private mapperRequestToItemInterface(value: any): Partial<Item> {
+    return ({
+      name: value.name,
+      description: value.description,
+      price: value.price
+    })
   }
 }

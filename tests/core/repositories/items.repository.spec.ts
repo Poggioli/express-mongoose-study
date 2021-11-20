@@ -48,7 +48,7 @@ describe('ItemsRepository', () => {
           price: 1,
           description: 'description'
         }
-        await expect(repository.insert(item)).rejects.toThrow('Item validation failed: name: Path `name` is required.')
+        await expect(repository.insert(item)).rejects.toThrow('ValidationError: name: Path `name` is required.')
       })
 
       it(`Should return an Error
@@ -58,7 +58,7 @@ describe('ItemsRepository', () => {
           name: 'name',
           description: 'description'
         }
-        await expect(repository.insert(item)).rejects.toThrow('Item validation failed: price: Path `price` is required.')
+        await expect(repository.insert(item)).rejects.toThrow('ValidationError: price: Path `price` is required.')
       })
 
       it(`Should return an Error
@@ -70,7 +70,7 @@ describe('ItemsRepository', () => {
           description: 'description'
         }
         await expect(repository.insert(item)).rejects
-          .toThrow('Item validation failed: price: Path `price` (0.5) is less than minimum allowed value (1).')
+          .toThrow('ValidationError: price: Path `price` (0.5) is less than minimum allowed value (1).')
       })
 
       it(`Should return an Error
@@ -80,7 +80,7 @@ describe('ItemsRepository', () => {
           name: 'name',
           price: 1
         }
-        await expect(repository.insert(item)).rejects.toThrow('Item validation failed: description: Path `description` is required.')
+        await expect(repository.insert(item)).rejects.toThrow('ValidationError: description: Path `description` is required.')
       })
 
       it(`Should return an Error
@@ -94,7 +94,7 @@ describe('ItemsRepository', () => {
         }
         await expect(repository.insert(item)).rejects
           // eslint-disable-next-line max-len
-          .toThrow(`Item validation failed: description: Path \`description\` (\`${description}\`) is longer than the maximum allowed length (300).`)
+          .toThrow(`ValidationError: description: Path \`description\` (\`${description}\`) is longer than the maximum allowed length (300).`)
       })
     })
   })

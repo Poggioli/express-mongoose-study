@@ -134,4 +134,76 @@ describe('ItemsService', () => {
       expect(spyResponseJson).toHaveBeenCalledWith('Error message')
     })
   })
+
+  describe('Insert method', () => {
+    it(`Should return a ObjectId
+        And status code 201
+        When the body is valid`, async () => {
+      expect.assertions(5)
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      request = {
+        body: item
+      }
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      jest.spyOn(repository, 'insert').mockResolvedValueOnce(id)
+      await service.insert(request as Request, response as Response, next)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(201)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith(id.toString())
+      expect(repository.insert).toHaveBeenCalledWith(item)
+    })
+
+    it(`Should return an array of message error
+        And status code 422
+        When the body is invalid`, async () => {
+      expect.assertions(4)
+      const item: Partial<Item> = {
+        price: 1,
+        description: 'description'
+      }
+      request = {
+        body: item
+      }
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      jest.spyOn(repository, 'insert').mockRejectedValue({
+        name: 'ValidationError',
+        errors: {
+          name: {
+            message: 'ValidatorError: Path `name` is required'
+          }
+        }
+      })
+      await service.insert(request as Request, response as Response, next)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(422)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith(['ValidatorError: Path `name` is required'])
+    })
+
+    it(`Should return an error message
+        And status code 500
+        When call insert`, async () => {
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      request = {
+        body: item
+      }
+      jest.spyOn(repository, 'insert').mockRejectedValueOnce({ message: 'Error message' })
+      expect.assertions(4)
+      await service
+        .insert(request as Request, response as Response, next)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(500)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Error message')
+    })
+  })
 })

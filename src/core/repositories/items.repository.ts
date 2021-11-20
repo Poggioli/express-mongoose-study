@@ -14,6 +14,10 @@ export default class ItemsRepository {
 
   public insert = async (value: Item): Promise<mongoose.Types.ObjectId> => {
     const document: Item = new ItemModel(value)
-    return document.save().then((doc) => doc._id)
+    return document.save()
+      .then((doc) => doc._id)
+      .catch((er) => {
+        throw new Error(er)
+      })
   }
 }
