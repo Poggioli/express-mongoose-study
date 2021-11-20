@@ -1,12 +1,19 @@
-import { Item, ItemInterface } from '@models'
-import { Model } from 'mongoose'
+import { Item, ItemModel } from '@models'
+import mongoose, { Model } from 'mongoose'
 
 export default class ItemsRepository {
-  private model: Model<ItemInterface>
+  private model: Model<Item>
 
   constructor() {
-    this.model = Item
+    this.model = ItemModel
   }
 
-  public findAll = (): Promise<ItemInterface[]> => this.model.find().then()
+  public findAll = async (): Promise<Item[]> => this.model.find().then()
+
+  public findById = async (id: mongoose.Types.ObjectId): Promise<Item> => this.model.findById(id).then()
+
+  public insert = async (value: Item): Promise<mongoose.Types.ObjectId> => {
+    const document: Item = new ItemModel(value)
+    return document.save().then((doc) => doc._id)
+  }
 }

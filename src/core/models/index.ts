@@ -1,3 +1,3 @@
-import Item, { ItemInterface } from './items.models'
+import ItemModel, { Item } from './items.models'
 
-export { Item, ItemInterface }
+export { ItemModel, Item }

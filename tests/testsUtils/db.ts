@@ -4,21 +4,25 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 
 class MongoD {
-  private mongod: any
+  private _mongod: any
+
+  public get mongod(): MongoMemoryServer {
+    return this._mongod
+  }
 
   public async createDB(): Promise<void> {
-    this.mongod = await MongoMemoryServer.create()
+    this._mongod = await MongoMemoryServer.create()
   }
 
   public async connect(): Promise<void> {
-    const uri = this.mongod.getUri()
+    const uri = this._mongod.getUri()
     await mongoose.connect(uri)
   }
 
   public async disconnect(): Promise<void> {
     await mongoose.connection.dropDatabase()
     await mongoose.connection.close()
-    await this.mongod.stop()
+    await this._mongod.stop()
   }
 
   public async clear(): Promise<void> {

@@ -1,17 +1,16 @@
 import {
-  Document, Model, model, ObjectId, Schema
+  Document, Model, model, Schema
 } from 'mongoose'
 
-export interface ItemInterface extends Document {
+export interface Item extends Document {
   name: string,
   price: number,
   description: string,
-  updatedAt: Date,
-  createdAt: Date,
-  _id: ObjectId
+  createdAt?: Date,
+  updatedAt?: Date
 }
 
-const itemSchema = new Schema({
+const itemSchema = new Schema<Item>({
   name: {
     type: String,
     required: true,
@@ -29,11 +28,8 @@ const itemSchema = new Schema({
     maxlength: 300
   }
 }, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
+  timestamps: true
 })
 
-const Item: Model<ItemInterface> = model<ItemInterface>('Item', itemSchema)
-export default Item
+const ItemModel: Model<Item> = model<Item>('Item', itemSchema)
+export default ItemModel
