@@ -131,4 +131,50 @@ describe('ItemsRepository', () => {
       expect(result).toBeNull()
     })
   })
+
+  describe('Update method', () => {
+    it(`Should return the document
+        When update works`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id = await repository.insert(item)
+      item.name = 'name 12345'
+      const oldItem: Item = await repository.findById(id) as Item
+      const result: Item = await repository.update(id, item) as Item
+      expect(result.name).toBe('name 12345')
+      expect(result.price).toBe(1)
+      expect(result.description).toBe('description')
+      expect((result.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
+    })
+
+    it(`Should return null
+        When update not found a documento to update`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      await repository.insert(item)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const result: Item | null = await repository.update(id, item)
+      expect(result).toBeNull()
+    })
+    describe('Validation Errors', () => {
+      it(`Should run the validations
+        When update is called`, async () => {
+        const item: any = {
+          name: 'name',
+          price: 1,
+          description: 'description'
+        }
+        const id = await repository.insert(item)
+        item.price = 0.5
+        await expect(repository.update(id, item)).rejects
+          .toThrow('ValidationError: price: Path `price` (0.5) is less than minimum allowed value (1).')
+      })
+    })
+  })
 })

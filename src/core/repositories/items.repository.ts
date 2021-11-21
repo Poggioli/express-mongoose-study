@@ -20,4 +20,13 @@ export default class ItemsRepository {
         throw new Error(er)
       })
   }
+
+  public update = async (id: mongoose.Types.ObjectId, value: Item): Promise<Item | null> => {
+    const options = { runValidators: true, new: true }
+    return this.model.findByIdAndUpdate(id, value, options)
+      .then()
+      .catch((er) => {
+        throw new Error(er)
+      })
+  }
 }
