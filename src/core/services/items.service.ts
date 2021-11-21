@@ -24,16 +24,24 @@ export default class ItemsService {
     }
   }
 
-  public async findById(req: Request, resp: Response, next: NextFunction): Promise<void | Response> {
-    const { id } = req.params
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      resp.status(422).json('Id format is not valid')
-      return next()
+  public findById(): (req: Request, resp: Response, next: NextFunction) => Promise<void> {
+    // eslint-disable-next-line consistent-return
+    return async (req: Request, resp: Response, next: NextFunction): Promise<void> => {
+      try {
+        const { id } = req.params
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          resp.status(422).json('Id format is not valid')
+          return next()
+        }
+        const finalId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(id)
+        const data: Item | null = await this.repository.findById(finalId)
+          .then()
+          .catch((err) => { throw err })
+        resp.status(data ? 200 : 404).json(data || 'Document not found')
+      } catch (err: any) {
+        resp.status(500).json(err.message)
+      }
     }
-    const finalId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(id)
-    return this.repository.findById(finalId)
-      .then((item: Item | null) => (item ? resp.status(200).json(item) : resp.status(404).json('Document not found')))
-      .catch((err) => { resp.status(500).json(err.message) })
   }
 
   public insert(): (req: Request, resp: Response) => Promise<void> {

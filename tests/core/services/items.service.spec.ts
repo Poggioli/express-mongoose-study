@@ -6,7 +6,6 @@ import ItemsRepository from '../../../src/core/repositories'
 import { Item } from '../../../src/core/models'
 
 const service = Object.getPrototypeOf(new ItemsService())
-// const service = new ItemsService()
 describe('ItemsService', () => {
   let request: Partial<Request>
   let response: Partial<Response>
@@ -75,7 +74,8 @@ describe('ItemsService', () => {
         }
       }
       jest.spyOn(repository, 'findById').mockResolvedValueOnce(itemToReturn as Item)
-      await service.findById(request as Request, response as Response, next)
+      const call = await service.findById()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(200)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -94,7 +94,8 @@ describe('ItemsService', () => {
         }
       }
       jest.spyOn(repository, 'findById').mockResolvedValueOnce(null)
-      await service.findById(request as Request, response as Response, next)
+      const call = await service.findById()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(404)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -109,7 +110,8 @@ describe('ItemsService', () => {
           id: '123'
         }
       }
-      await service.findById(request as Request, response as Response, next)
+      const call = await service.findById()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(422)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -127,8 +129,8 @@ describe('ItemsService', () => {
           id: id.toString()
         }
       }
-      await service
-        .findById(request as Request, response as Response, next)
+      const call = await service.findById()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(500)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
