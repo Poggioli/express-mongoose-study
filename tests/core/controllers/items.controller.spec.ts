@@ -44,4 +44,30 @@ describe('ItemsController', () => {
         expect(mongoose.Types.ObjectId.isValid(result.body)).toBe(true)
       })
   })
+
+  it(`Should return an Item
+      When call the endpoint GET /items/:id`, async () => {
+    const item: Partial<Item> = {
+      name: 'name',
+      price: 1,
+      description: 'description'
+    }
+    const id: mongoose.Types.ObjectId = await request(server)
+      .post('/v1/items')
+      .send(item)
+      .then((result) => result.body)
+
+    await request(server)
+      .get('/v1/items/'.concat(id.toString()))
+      .then((result) => {
+        expect(result.statusCode).toBe(200)
+        const itemReturned: Item = result.body
+        expect(itemReturned.name).toBe('name')
+        expect(itemReturned.price).toBe(1)
+        expect(itemReturned.description).toBe('description')
+        expect(itemReturned._id).toBe(id)
+        expect(itemReturned.createdAt).toBeDefined()
+        expect(itemReturned.updatedAt).toBeDefined()
+      })
+  })
 })
