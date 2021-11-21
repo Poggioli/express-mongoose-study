@@ -11,10 +11,17 @@ export default class ItemsService {
     this.repository = new ItemsRepository()
   }
 
-  public async findAll(req: Request, resp: Response): Promise<void | Response> {
-    return this.repository.findAll()
-      .then((items: Item[]) => resp.status(200).json(items))
-      .catch((err) => { resp.status(500).json(err.message) })
+  public findAll(): (req: Request, resp: Response) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const data: Item[] = await this.repository.findAll()
+          .then((items: Item[]) => items)
+          .catch((err) => { throw err })
+        resp.status(200).json(data)
+      } catch (err: any) {
+        resp.status(500).json(err.message)
+      }
+    }
   }
 
   public async findById(req: Request, resp: Response, next: NextFunction): Promise<void | Response> {

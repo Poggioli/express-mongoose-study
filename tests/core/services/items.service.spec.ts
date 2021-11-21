@@ -33,7 +33,8 @@ describe('ItemsService', () => {
         When call findAll`, async () => {
       expect.assertions(4)
       jest.spyOn(repository, 'findAll').mockResolvedValueOnce([])
-      await service.findAll(request as Request, response as Response)
+      const call = await service.findAll()
+      await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(200)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -45,8 +46,8 @@ describe('ItemsService', () => {
         When call findAll`, async () => {
       jest.spyOn(repository, 'findAll').mockRejectedValueOnce({ message: 'Error message' })
       expect.assertions(4)
-      await service
-        .findAll(request as Request, response as Response)
+      const call = await service.findAll()
+      await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(500)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -54,7 +55,7 @@ describe('ItemsService', () => {
     })
   })
 
-  describe('FindAll method', () => {
+  describe('findById method', () => {
     it(`Should return a Item
         And status code 200
         When is a valid ID

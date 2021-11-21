@@ -7,7 +7,11 @@
       {
         "alias": {
           "@infra": "./src/core/infra",
-          "@src": "./src"
+          "@src": "./src",
+          "@models": "./src/core/models/index.ts",
+          "@repositories": "./src/core/repositories/index.ts",
+          "@services": "./src/core/services/index.ts",
+          "@controllers": "./src/core/controllers/index.ts"
         }
       }
     ]

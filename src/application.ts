@@ -1,4 +1,5 @@
 import logger from '@infra/logger'
+import router from '@src/core/entrypoint'
 import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
@@ -21,11 +22,11 @@ class Application {
   }
 
   public async bootstrap(): Promise<this> {
-    return this.initDatabase()
-      .then(() => this.configPort())
+    return this.configPort()
       .then(() => this.configEnvironment())
       .then(() => this.configMiddlewares())
       .then(() => this.configMorgan())
+      .then(() => this.configureRoutes())
   }
 
   public listening(): Server {
@@ -98,7 +99,15 @@ class Application {
     return finalUrl
   }
 
-  private initDatabase(): Promise<any> {
+  private configureRoutes(): Promise<any> {
+    return new Promise((resolve) => {
+      logger.info('Configuring Routes')
+      this._app.use('/v1', router)
+      resolve(this)
+    })
+  }
+
+  public initDatabase(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
         logger.info('Trying to database')
