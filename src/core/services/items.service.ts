@@ -36,11 +36,14 @@ export default class ItemsService {
       .catch((err) => { resp.status(500).json(err.message) })
   }
 
-  public async insert(req: Request, resp: Response, next: NextFunction): Promise<void | Response> {
-    const value: Partial<Item> = this.mapperRequestToItemInterface(req.body)
-    return this.repository.insert(value as Item)
-      .then((_id: mongoose.Types.ObjectId) => resp.status(201).json(_id.toString()))
-      .catch((err) => {
+  public insert(): (req: Request, resp: Response) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const value: Partial<Item> = this.mapperRequestToItemInterface(req.body)
+        const data: string = await this.repository.insert(value as Item)
+          .then((_id: mongoose.Types.ObjectId) => _id.toString())
+        resp.status(201).json(data)
+      } catch (err: any) {
         let statusCode!: number
         let messages: any
         if (err.name === 'ValidationError') {
@@ -51,7 +54,8 @@ export default class ItemsService {
           statusCode = 422
         }
         resp.status(statusCode || 500).json(messages || err.message)
-      })
+      }
+    }
   }
 
   private mapperRequestToItemInterface(value: any): Partial<Item> {

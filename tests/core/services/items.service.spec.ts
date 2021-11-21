@@ -151,7 +151,8 @@ describe('ItemsService', () => {
       }
       const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
       jest.spyOn(repository, 'insert').mockResolvedValueOnce(id)
-      await service.insert(request as Request, response as Response, next)
+      const call = await service.insert()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(201)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -179,7 +180,8 @@ describe('ItemsService', () => {
           }
         }
       })
-      await service.insert(request as Request, response as Response, next)
+      const call = await service.insert()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(422)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
@@ -199,8 +201,8 @@ describe('ItemsService', () => {
       }
       jest.spyOn(repository, 'insert').mockRejectedValueOnce({ message: 'Error message' })
       expect.assertions(4)
-      await service
-        .insert(request as Request, response as Response, next)
+      const call = await service.insert()
+      await call(request as Request, response as Response, next)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(500)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)

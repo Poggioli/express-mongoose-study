@@ -12,4 +12,9 @@ export default class ItemsController {
     const url: string = '/'.concat(ItemModel.collection.name)
     router.get(url, [service.findAll()])
   }
+
+  private static insert(router: Router, service: ItemsService): void {
+    const url: string = '/'.concat(ItemModel.collection.name)
+    router.post(url, [service.insert()])
+  }
 }
