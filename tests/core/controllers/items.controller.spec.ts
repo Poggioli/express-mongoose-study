@@ -70,4 +70,24 @@ describe('ItemsController', () => {
         expect(itemReturned.updatedAt).toBeDefined()
       })
   })
+
+  it(`Should return an empty bodi
+      When call the endpoint DELETE /items/:id`, async () => {
+    const item: Partial<Item> = {
+      name: 'name',
+      price: 1,
+      description: 'description'
+    }
+    const id: mongoose.Types.ObjectId = await request(server)
+      .post('/v1/items')
+      .send(item)
+      .then((result) => result.body)
+
+    await request(server)
+      .delete('/v1/items/'.concat(id.toString()))
+      .then((result) => {
+        expect(result.statusCode).toBe(204)
+        expect(result.body).toStrictEqual({})
+      })
+  })
 })

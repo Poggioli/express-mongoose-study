@@ -8,6 +8,7 @@ export default class ItemsController {
     this.findAll(router, service)
     this.insert(router, service)
     this.findById(router, service)
+    this.delete(router, service)
   }
 
   private static findAll(router: Router, service: ItemsService): void {
@@ -23,5 +24,10 @@ export default class ItemsController {
   private static findById(router: Router, service: ItemsService): void {
     const url: string = '/'.concat(ItemModel.collection.name, '/:id')
     router.get(url, [service.findById()])
+  }
+
+  private static delete(router: Router, service: ItemsService): void {
+    const url: string = '/'.concat(ItemModel.collection.name, '/:id')
+    router.delete(url, [service.delete()])
   }
 }
