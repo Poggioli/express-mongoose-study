@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import db from '../../testsUtils/db'
 import { UsersRepository } from '../../../src/core/repositories'
+import { User } from '../../../src/core/models'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository
@@ -99,6 +100,23 @@ describe('UsersRepository', () => {
           // eslint-disable-next-line max-len
           .toThrow('MongoServerError: E11000 duplicate key error collection: test.users index: email_1 dup key: { email: "email@test.com" }')
       })
+    })
+  })
+
+  describe('FindByEmail methor', () => {
+    it(`Should return an User
+        When call FindByEmail
+        With a right email`, async () => {
+      const user: any = {
+        name: 'name',
+        email: 'email@test.com',
+        password: 'password'
+      }
+      await repository.insert(user)
+      const result = await repository.findByEmail(user.email) as User
+      expect(result).toBeDefined()
+      expect(result.name).toBe('name')
+      expect(result.email).toBe('email@test.com')
     })
   })
 })

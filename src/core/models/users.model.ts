@@ -15,7 +15,7 @@ export interface User extends Document {
 }
 
 interface _userModel extends Model<User> {
-  findByEmail(email: string): Promise<User>
+  findByEmail(email: string): Promise<User | null>
 }
 
 const userSchema = new Schema<User>({

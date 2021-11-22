@@ -16,4 +16,6 @@ export default class UsersRepository {
         throw new Error(err)
       })
   }
+
+  public findByEmail = async (value: string): Promise<User | null> => UserModel.findByEmail(value).then()
 }
