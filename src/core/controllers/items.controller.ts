@@ -1,4 +1,4 @@
-import ItemsService from '@services'
+import { ItemsService } from '@services'
 import { ItemModel } from '@src/core/models'
 import { Router } from 'express'
 

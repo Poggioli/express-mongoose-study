@@ -84,6 +84,21 @@ describe('UsersRepository', () => {
         }
         await expect(repository.insert(user)).rejects.toThrow('ValidationError: password: Path `password` is required.')
       })
+
+      it(`Should return an Error
+          When call insert
+          With the same email`, async () => {
+        const user: any = {
+          name: 'name',
+          email: 'email@test.com',
+          password: 'password'
+        }
+        const result = await repository.insert(user)
+        expect(mongoose.Types.ObjectId.isValid(result)).toBe(true)
+        await expect(repository.insert(user)).rejects
+          // eslint-disable-next-line max-len
+          .toThrow('MongoServerError: E11000 duplicate key error collection: test.users index: email_1 dup key: { email: "email@test.com" }')
+      })
     })
   })
 })

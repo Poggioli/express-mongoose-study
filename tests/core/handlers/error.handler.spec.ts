@@ -56,4 +56,36 @@ describe('handleError', () => {
     expect(spyJson).toHaveBeenCalledTimes(1)
     expect(spyJson).toHaveBeenCalledWith(unknownError.message)
   })
+
+  it(`When is a Mongo error
+      And is 11000 code
+      Then should return an 400 statusCode
+      And the right message`, () => {
+    const err = {
+      name: 'MongoError',
+      code: 11000,
+      message: 'duplicated key'
+    }
+    handleError(resp as Response, err)
+    expect(spyStatus).toHaveBeenCalledTimes(1)
+    expect(spyStatus).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
+    expect(spyJson).toHaveBeenCalledTimes(1)
+    expect(spyJson).toHaveBeenCalledWith(err.message)
+  })
+
+  it(`When is a Mongo error
+      And isn't 11000 code
+      Then should return an 500 statusCode
+      And the right message`, () => {
+    const err = {
+      name: 'MongoError',
+      code: 1100,
+      message: 'duplicated key'
+    }
+    handleError(resp as Response, err)
+    expect(spyStatus).toHaveBeenCalledTimes(1)
+    expect(spyStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
+    expect(spyJson).toHaveBeenCalledTimes(1)
+    expect(spyJson).toHaveBeenCalledWith(err.message)
+  })
 })

@@ -1,8 +1,8 @@
 /* eslint-disable dot-notation */
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import { StatusCodes } from 'http-status-codes'
-import ItemsService from '../../../src/core/services'
+import { ItemsService } from '../../../src/core/services'
 import { ItemsRepository } from '../../../src/core/repositories'
 import { Item } from '../../../src/core/models'
 
@@ -14,7 +14,6 @@ describe('ItemsService', () => {
   let spyResponseStatus: jest.SpyInstance
   let spyResponseSend: jest.SpyInstance
   let repository: ItemsRepository
-  const next: NextFunction = jest.fn()
 
   beforeEach(() => {
     response = {
