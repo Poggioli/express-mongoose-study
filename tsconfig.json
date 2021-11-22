@@ -13,12 +13,12 @@
     "paths": {
       "@infra/*": ["./src/core/infra/*"],
       "@src/*": ["./src/*"],
-      "@models": ["./src/core/models/index.ts"],
-      "@repositories": ["./src/core/repositories/index.ts"],
-      "@services": ["./src/core/services/index.ts"],
-      "@controllers": ["./src/core/controllers/index.ts"],
-      "@handlers": ["./src/core/handlers/index.ts"],
-      "@errors": ["./src/core/customErrors/index.ts"]
+      "@models": ["./src/core/models/index"],
+      "@repositories": ["./src/core/repositories/index"],
+      "@services": ["./src/core/services/index"],
+      "@controllers": ["./src/core/controllers/index"],
+      "@handlers": ["./src/core/handlers/index"],
+      "@errors": ["./src/core/customErrors/index"]
     },
     "removeComments": true,
     "resolveJsonModule": true,
