@@ -8,7 +8,7 @@ export default class ItemsRepository {
     this.model = ItemModel
   }
 
-  public findAll = async (): Promise<Item[]> => this.model.find().then()
+  public findAll = async (): Promise<Item[]> => this.model.find({ active: true }).then()
 
   public findById = async (id: mongoose.Types.ObjectId): Promise<Item | null> => this.model.findById(id).then()
 
@@ -28,5 +28,11 @@ export default class ItemsRepository {
       .catch((er) => {
         throw new Error(er)
       })
+  }
+
+  public delete = async (id: mongoose.Types.ObjectId): Promise<Item | null> => {
+    const value = { active: false }
+    const options = { new: true }
+    return this.model.findByIdAndUpdate(id, value, options).then()
   }
 }

@@ -6,6 +6,7 @@ export interface Item extends Document {
   name: string,
   price: number,
   description: string,
+  active?: boolean,
   createdAt?: Date,
   updatedAt?: Date
 }
@@ -26,6 +27,10 @@ const itemSchema = new Schema<Item>({
     required: true,
     trim: true,
     maxlength: 300
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true

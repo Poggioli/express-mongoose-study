@@ -133,7 +133,7 @@ describe('ItemsRepository', () => {
   })
 
   describe('Update method', () => {
-    it(`Should return the document
+    it(`Should return the Item
         When update works`, async () => {
       const item: any = {
         name: 'name',
@@ -151,7 +151,7 @@ describe('ItemsRepository', () => {
     })
 
     it(`Should return null
-        When update not found a documento to update`, async () => {
+        When update not found a document to update`, async () => {
       const item: any = {
         name: 'name',
         price: 1,
@@ -162,6 +162,7 @@ describe('ItemsRepository', () => {
       const result: Item | null = await repository.update(id, item)
       expect(result).toBeNull()
     })
+
     describe('Validation Errors', () => {
       it(`Should run the validations
         When update is called`, async () => {
@@ -175,6 +176,39 @@ describe('ItemsRepository', () => {
         await expect(repository.update(id, item)).rejects
           .toThrow('ValidationError: price: Path `price` (0.5) is less than minimum allowed value (1).')
       })
+    })
+  })
+
+  describe('Delete method', () => {
+    it(`Should return the Item
+        When delete works`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id = await repository.insert(item)
+      const insertedItem: Item = await repository.findById(id) as Item
+      expect(insertedItem.active).toBe(true)
+      const deletedItem: Item = await repository.delete(id) as Item
+      expect(deletedItem.name).toBe(item.name)
+      expect(deletedItem.price).toBe(item.price)
+      expect(deletedItem.description).toBe(item.description)
+      expect((deletedItem.updatedAt as Date).getTime() > (insertedItem.updatedAt as Date).getTime()).toBe(true)
+      expect(deletedItem.active).toBe(false)
+    })
+
+    it(`Should return null
+        When delete not found a document to delete`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      await repository.insert(item)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const result: Item | null = await repository.delete(id)
+      expect(result).toBeNull()
     })
   })
 })
