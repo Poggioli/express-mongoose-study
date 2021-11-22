@@ -69,6 +69,18 @@ export default class ItemsService {
     }
   }
 
+  public delete(): (req: Request, resp: Response, next: NextFunction) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const id = this.getId(req)
+        await this.repository.delete(id).then().catch((err) => { throw err })
+        resp.status(StatusCodes.NO_CONTENT).send()
+      } catch (err: UnprocessableEntity | NotFound | any) {
+        handleError(resp, err)
+      }
+    }
+  }
+
   private getId(req: Request): mongoose.Types.ObjectId {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) {

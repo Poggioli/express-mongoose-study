@@ -12,17 +12,20 @@ describe('ItemsService', () => {
   let response: Partial<Response>
   let spyResponseJson: jest.SpyInstance
   let spyResponseStatus: jest.SpyInstance
+  let spyResponseSend: jest.SpyInstance
   let repository: ItemsRepository
   const next: NextFunction = jest.fn()
 
   beforeEach(() => {
     response = {
       status: () => response as Response,
-      json: jest.fn()
+      json: jest.fn(),
+      send: jest.fn()
     }
     request = {}
     spyResponseStatus = jest.spyOn(response, 'status')
     spyResponseJson = jest.spyOn(response, 'json')
+    spyResponseSend = jest.spyOn(response, 'send')
     repository = new ItemsRepository()
     service.repository = repository
   })
@@ -44,8 +47,8 @@ describe('ItemsService', () => {
     it(`Should return an error message
         And status code 500
         When call findAll`, async () => {
-      jest.spyOn(repository, 'findAll').mockRejectedValueOnce({ message: 'Error message' })
       expect.assertions(4)
+      jest.spyOn(repository, 'findAll').mockRejectedValueOnce({ message: 'Error message' })
       const call = await service.findAll()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
@@ -55,7 +58,7 @@ describe('ItemsService', () => {
     })
   })
 
-  describe('findById method', () => {
+  describe('FindById method', () => {
     it(`Should return a Item
         And status code 200
         When is a valid ID
@@ -194,6 +197,7 @@ describe('ItemsService', () => {
     it(`Should return an error message
         And status code 500
         When call insert`, async () => {
+      expect.assertions(4)
       const item: Partial<Item> = {
         name: 'name',
         price: 1,
@@ -203,7 +207,6 @@ describe('ItemsService', () => {
         body: item
       }
       jest.spyOn(repository, 'insert').mockRejectedValueOnce({ message: 'Error message' })
-      expect.assertions(4)
       const call = await service.insert()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
@@ -297,6 +300,72 @@ describe('ItemsService', () => {
         body: item
       }
       const call = await service.update()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Error message')
+    })
+  })
+
+  describe('Delete method', () => {
+    let item: Partial<Item>
+
+    beforeEach(() => {
+      item = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+    })
+
+    it(`Should return status code 204
+        When ID is Valid`, async () => {
+      expect.assertions(5)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      request = {
+        params: {
+          id: id.toString()
+        }
+      }
+      jest.spyOn(repository, 'delete').mockResolvedValueOnce(item as Item)
+      const call = await service.delete()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NO_CONTENT)
+      expect(spyResponseJson).toHaveBeenCalledTimes(0)
+      expect(spyResponseSend).toHaveBeenCalledTimes(1)
+      expect(repository.delete).toHaveBeenCalledWith(id)
+    })
+
+    it(`Should return a status code 422
+        When is an invalid ID`, async () => {
+      expect.assertions(4)
+      request = {
+        params: {
+          id: '123'
+        }
+      }
+      const call = await service.delete()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.UNPROCESSABLE_ENTITY)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Id format is not valid')
+    })
+
+    it(`Should return an error message
+        And status code 500
+        When call Delete`, async () => {
+      expect.assertions(4)
+      jest.spyOn(repository, 'delete').mockRejectedValueOnce({ message: 'Error message' })
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      request = {
+        params: {
+          id: id.toString()
+        }
+      }
+      const call = await service.delete()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
