@@ -75,7 +75,7 @@ export default class ItemsService {
         const id = this.getId(req)
         await this.repository.delete(id).then().catch((err) => { throw err })
         resp.status(StatusCodes.NO_CONTENT).send()
-      } catch (err: UnprocessableEntity | NotFound | any) {
+      } catch (err: any) {
         handleError(resp, err)
       }
     }

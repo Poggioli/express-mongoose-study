@@ -24,6 +24,9 @@ const environment = {
     url: process.env.URL_DB || config.get('db.url'),
     username: process.env.USERNAME_DB || config.get('db.username'),
     password: process.env.PASSWORD_DB || config.get('db.password')
+  },
+  security: {
+    roundSalts: config.get('security.roundSalts')
   }
 }
 

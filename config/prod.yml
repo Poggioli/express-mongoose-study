@@ -5,3 +5,5 @@ db:
   url: mongodb://{username}:{password}@localhost:27017
   username: root
   password: rootPass1234
+security:
+  roundSalts: 15
