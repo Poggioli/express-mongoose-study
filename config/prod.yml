@@ -1,2 +1,7 @@
 app:
   port: 3002
+db:
+  useAuth: true
+  url: mongodb://{username}:{password}@localhost:27017
+  username: root
+  password: rootPass1234
