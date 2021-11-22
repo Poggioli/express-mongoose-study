@@ -21,7 +21,7 @@ class Application {
     this._app = express()
   }
 
-  public async bootstrap(): Promise<this> {
+  public bootstrap(): Promise<Application> {
     return this.configPort()
       .then(() => this.configEnvironment())
       .then(() => this.configMiddlewares())
@@ -34,7 +34,7 @@ class Application {
     return this._app.listen(port)
   }
 
-  private configPort(): Promise<any> {
+  private configPort(): Promise<Application> {
     return new Promise((resolve) => {
       const { port } = environment.app
       logger.info(`Loading application with port: ${port}`)
@@ -43,7 +43,7 @@ class Application {
     })
   }
 
-  private configEnvironment(): Promise<any> {
+  private configEnvironment(): Promise<Application> {
     return new Promise((resolve) => {
       const { node } = environment
       logger.info(`Loading application with Environment: ${node}`)
@@ -52,7 +52,7 @@ class Application {
     })
   }
 
-  private configMiddlewares(): Promise<any> {
+  private configMiddlewares(): Promise<Application> {
     return new Promise((resolve) => {
       logger.info(`Configuring Case Sensitive Rounting to: ${this.IS_CASE_SENSITIVE_ROUTING}`)
       this._app.set('case sensitive routing', this.IS_CASE_SENSITIVE_ROUTING)
@@ -77,7 +77,7 @@ class Application {
     })
   }
 
-  private configMorgan(): Promise<any> {
+  private configMorgan(): Promise<Application> {
     return new Promise((resolve) => {
       logger.info('Configuring Morgan')
       this._app.use(morgan(
@@ -99,7 +99,7 @@ class Application {
     return finalUrl
   }
 
-  private configureRoutes(): Promise<any> {
+  private configureRoutes(): Promise<Application> {
     return new Promise((resolve) => {
       logger.info('Configuring Routes')
       this._app.use('/v1', router)
@@ -107,7 +107,7 @@ class Application {
     })
   }
 
-  public initDatabase(): Promise<any> {
+  public initDatabase(): Promise<Application> {
     return new Promise((resolve, reject) => {
       try {
         logger.info('Trying to database')
