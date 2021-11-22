@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 import { StatusCodes } from 'http-status-codes'
 import ItemsService from '../../../src/core/services'
-import ItemsRepository from '../../../src/core/repositories'
+import { ItemsRepository } from '../../../src/core/repositories'
 import { Item } from '../../../src/core/models'
 
 const service = Object.getPrototypeOf(new ItemsService())

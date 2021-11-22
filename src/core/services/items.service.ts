@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import ItemsRepository from '@repositories'
+import { ItemsRepository } from '@repositories'
 import { NotFound, UnprocessableEntity } from '@src/core/customErrors'
 import handleError from '@src/core/handlers'
 import { Item } from '@src/core/models'

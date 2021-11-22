@@ -1,3 +1,4 @@
 import ItemsRepository from './items.repository'
+import UsersRepository from './users.repository'
 
-export default ItemsRepository
+export { ItemsRepository, UsersRepository }
