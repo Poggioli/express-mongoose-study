@@ -17,7 +17,10 @@ describe('ItemsController', () => {
 
   afterEach(async () => { await db.clear() })
 
-  afterAll(async () => { await db.disconnect() })
+  afterAll(async () => {
+    await db.disconnect()
+    server.close()
+  })
 
   it(`Should return an Array
       When call the endpoint GET /items`, async () => {

@@ -1,3 +1,4 @@
 import ItemsController from './items.controller'
+import UsersController from './users.controller'
 
-export default ItemsController
+export { ItemsController, UsersController }
