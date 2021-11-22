@@ -11,7 +11,9 @@
           "@models": "./src/core/models/index.ts",
           "@repositories": "./src/core/repositories/index.ts",
           "@services": "./src/core/services/index.ts",
-          "@controllers": "./src/core/controllers/index.ts"
+          "@controllers": "./src/core/controllers/index.ts",
+          "@handlers": "./src/core/handlers/index.ts",
+          "@errors": "./src/core/customErrors/index.ts"
         }
       }
     ]

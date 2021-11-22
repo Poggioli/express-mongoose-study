@@ -32,6 +32,7 @@ module.exports = {
     'swagger*',
     'environment.ts',
     'application.ts',
+    'logger.ts',
     'tests'
   ],
   coverageReporters: [
