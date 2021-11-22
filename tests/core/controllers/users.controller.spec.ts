@@ -23,7 +23,7 @@ describe('ItemsController', () => {
   })
 
   it(`Should return an ObjectId value
-      When call the endpoint POST /items`, async () => {
+      When call the endpoint POST /users`, async () => {
     const item: Partial<User> = {
       name: 'name',
       email: 'teste@email.com',
@@ -35,6 +35,28 @@ describe('ItemsController', () => {
       .then((result) => {
         expect(result.statusCode).toBe(201)
         expect(mongoose.Types.ObjectId.isValid(result.body)).toBe(true)
+      })
+  })
+
+  it(`Should return a statusCode 204
+      When call the endpoint GET /users/email?email=teste@email.com`, async () => {
+    const queryParams: URLSearchParams = new URLSearchParams({
+      email: 'teste@email.com'
+    })
+    const item: Partial<User> = {
+      name: 'name',
+      email: 'teste@email.com',
+      password: 'password'
+    }
+    await request(server)
+      .post('/v1/users')
+      .send(item)
+
+    await request(server)
+      .get('/v1/users/email?'.concat(queryParams.toString()))
+      .then((result) => {
+        expect(result.statusCode).toBe(204)
+        expect(result.body).toStrictEqual({})
       })
   })
 })
