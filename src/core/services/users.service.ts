@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@src/core/customErrors'
+import { BadRequest, NotFound, UnprocessableEntity } from '@src/core/customErrors'
 import handleError from '@src/core/handlers'
 import { User } from '@src/core/models'
 import { UsersRepository } from '@src/core/repositories'
@@ -44,11 +44,34 @@ export default class UsersService {
     }
   }
 
+  public findById(): (req: Request, resp: Response) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const id = this.getId(req)
+        const data: User | null = await this.repository.findById(id).then().catch((err) => { throw err })
+        if (!data) {
+          throw new NotFound()
+        }
+        resp.status(StatusCodes.OK).json(data)
+      } catch (err: UnprocessableEntity | NotFound | any) {
+        handleError(resp, err)
+      }
+    }
+  }
+
   private mapperRequestToUserInterface(value: any): Partial<User> {
     return ({
       name: value.name,
       email: value.email,
       password: value.password
     })
+  }
+
+  private getId(req: Request): mongoose.Types.ObjectId {
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new UnprocessableEntity('Id format is not valid')
+    }
+    return new mongoose.Types.ObjectId(id)
   }
 }
