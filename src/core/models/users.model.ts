@@ -32,6 +32,10 @@ const userSchema = new Schema<User>({
     // eslint-disable-next-line max-len
     match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   },
+  active: {
+    type: Boolean,
+    default: true
+  },
   password: {
     type: String,
     required: true,

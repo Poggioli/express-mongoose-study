@@ -25,6 +25,22 @@ describe('ItemsRepository', () => {
       const result = await repository.findAll()
       expect(result).toStrictEqual([])
     })
+
+    it('Should return only Items active', async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const idOne = await repository.insert(item)
+      const idTwo = await repository.insert(item)
+      const idThree = await repository.insert(item)
+      expect((await repository.findAll()).length).toBe(3)
+      await repository.delete(idTwo)
+      const result = await repository.findAll()
+      expect(result.length).toBe(2)
+      expect(result.map((r) => r._id)).toStrictEqual([idOne, idThree])
+    })
   })
 
   describe('Insert method', () => {
@@ -115,6 +131,20 @@ describe('ItemsRepository', () => {
       expect(result.price).toBe(1)
       expect(result.createdAt).toBeInstanceOf(Date)
       expect(result.updatedAt).toBeInstanceOf(Date)
+    })
+
+    it(`Should return null
+        When call findById
+        With to a deleted Item before`, async () => {
+      const item: any = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id = await repository.insert(item)
+      expect(await repository.findById(id)).not.toBeNull()
+      await repository.delete(id)
+      expect(await repository.findById(id)).toBeNull()
     })
 
     it(`Should return null

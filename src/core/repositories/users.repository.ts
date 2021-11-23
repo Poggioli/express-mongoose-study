@@ -18,4 +18,6 @@ export default class UsersRepository {
   }
 
   public findByEmail = async (value: string): Promise<User | null> => UserModel.findByEmail(value).then()
+
+  public findById = async (id: mongoose.Types.ObjectId): Promise<User | null> => this.model.findOne({ _id: id, active: true }).then()
 }
