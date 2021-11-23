@@ -74,7 +74,7 @@ describe('ItemsController', () => {
       })
   })
 
-  it(`Should return an empty bodi
+  it(`Should return an empty body
       When call the endpoint DELETE /items/:id`, async () => {
     const item: Partial<Item> = {
       name: 'name',

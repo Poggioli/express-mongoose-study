@@ -59,4 +59,30 @@ describe('ItemsController', () => {
         expect(result.body).toStrictEqual({})
       })
   })
+
+  it(`Should return an Item
+      When call the endpoint GET /users/:id`, async () => {
+    const item: Partial<User> = {
+      name: 'name',
+      email: 'teste@email.com',
+      password: 'password'
+    }
+    const id: mongoose.Types.ObjectId = await request(server)
+      .post('/v1/users')
+      .send(item)
+      .then((result) => result.body)
+
+    await request(server)
+      .get('/v1/users/'.concat(id.toString()))
+      .then((result) => {
+        expect(result.statusCode).toBe(200)
+        const itemReturned: User = result.body
+        expect(itemReturned.name).toBe('name')
+        expect(itemReturned.password).toBeUndefined()
+        expect(itemReturned.email).toBe('teste@email.com')
+        expect(itemReturned._id).toBe(id)
+        expect(itemReturned.createdAt).toBeDefined()
+        expect(itemReturned.updatedAt).toBeDefined()
+      })
+  })
 })
