@@ -1,0 +1,24 @@
+name: Build
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+strategy:
+  matrix:
+    node-version: [16.13.0]
+steps:
+  - uses: actions/checkout@v2
+  - name: Node.js
+    uses: actions/setup-node@v1
+    with:
+      node-version: ${{ matrix.node-version }}
+  - name: npm install, lint, test and build
+    run: |
+      npm i
+      npm test
+      npm run lint
+      npm build
