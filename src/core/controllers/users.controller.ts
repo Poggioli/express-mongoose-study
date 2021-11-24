@@ -8,6 +8,7 @@ export default class UsersController {
     this.insert(router, service)
     this.findByEmail(router, service)
     this.findById(router, service)
+    this.delete(router, service)
   }
 
   private static insert(router: Router, service: UsersService): void {
@@ -23,5 +24,10 @@ export default class UsersController {
   private static findById(router: Router, service: UsersService): void {
     const url: string = '/'.concat(UserModel.collection.name, '/:id')
     router.get(url, [service.findById()])
+  }
+
+  private static delete(router: Router, service: UsersService): void {
+    const url: string = '/'.concat(UserModel.collection.name, '/:id')
+    router.delete(url, [service.delete()])
   }
 }
