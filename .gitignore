@@ -114,3 +114,6 @@ dist
 jest_html_reporters.html
 junit.xml
 mongoDB/*
+
+#Sonar
+.scannerwork
