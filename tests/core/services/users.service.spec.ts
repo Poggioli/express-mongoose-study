@@ -257,4 +257,95 @@ describe('UsersService', () => {
       expect(spyResponseJson).toHaveBeenCalledWith('Error message')
     })
   })
+
+  describe('Update method', () => {
+    let user: Partial<User>
+
+    beforeEach(() => {
+      user = {
+        name: 'name',
+        email: 'teste@email.com'
+      }
+    })
+
+    it(`Should return the User Who was updated
+        And status code 200
+        When the body is valid
+        And ID is Valid`, async () => {
+      expect.assertions(5)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      request = {
+        params: {
+          id: id.toString()
+        },
+        body: user
+      }
+      jest.spyOn(repository, 'update').mockResolvedValueOnce(user as User)
+      const call = await service.update()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith(user)
+      expect(repository.update).toHaveBeenCalledWith(id, user)
+    })
+
+    it(`Should return a status code 422
+        When is an invalid ID`, async () => {
+      expect.assertions(4)
+      request = {
+        params: {
+          id: '123'
+        },
+        body: user
+      }
+      const call = await service.update()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.UNPROCESSABLE_ENTITY)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Id format is not valid')
+    })
+
+    it(`Should return null
+        And status code 404
+        When is a valid ID
+        And Document don't exists`, async () => {
+      expect.assertions(4)
+      const id = new mongoose.Types.ObjectId()
+      request = {
+        params: {
+          id: id.toString()
+        },
+        body: user
+      }
+      jest.spyOn(repository, 'update').mockResolvedValueOnce(null)
+      const call = await service.update()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Document Not Found')
+    })
+
+    it(`Should return an error message
+        And status code 500
+        When call Update`, async () => {
+      expect.assertions(4)
+      jest.spyOn(repository, 'update').mockRejectedValueOnce({ message: 'Error message' })
+      const id = new mongoose.Types.ObjectId()
+      request = {
+        params: {
+          id: id.toString()
+        },
+        body: user
+      }
+      const call = await service.update()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Error message')
+    })
+  })
 })

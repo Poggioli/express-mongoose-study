@@ -59,7 +59,29 @@ export default class UsersService {
     }
   }
 
-  private mapperRequestToUserInterface(value: any): Partial<User> {
+  public update(): (req: Request, resp: Response) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const id = this.getId(req)
+        const value: Partial<User> = this.mapperRequestToUserInterface(req.body, true)
+        const data: User | null = await this.repository.update(id, value as User).then().catch((err) => { throw err })
+        if (!data) {
+          throw new NotFound()
+        }
+        resp.status(StatusCodes.OK).json(data)
+      } catch (err: UnprocessableEntity | NotFound | any) {
+        handleError(resp, err)
+      }
+    }
+  }
+
+  private mapperRequestToUserInterface(value: any, isUpdate?: boolean): Partial<User> {
+    if (isUpdate) {
+      return ({
+        name: value.name,
+        email: value.email
+      })
+    }
     return ({
       name: value.name,
       email: value.email,
