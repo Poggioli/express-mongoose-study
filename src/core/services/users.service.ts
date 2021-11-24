@@ -75,6 +75,18 @@ export default class UsersService {
     }
   }
 
+  public delete(): (req: Request, resp: Response) => Promise<void> {
+    return async (req: Request, resp: Response): Promise<void> => {
+      try {
+        const id = this.getId(req)
+        await this.repository.delete(id).then().catch((err) => { throw err })
+        resp.status(StatusCodes.NO_CONTENT).send()
+      } catch (err: any) {
+        handleError(resp, err)
+      }
+    }
+  }
+
   private mapperRequestToUserInterface(value: any, isUpdate?: boolean): Partial<User> {
     if (isUpdate) {
       return ({
