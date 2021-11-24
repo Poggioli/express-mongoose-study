@@ -1,4 +1,4 @@
-import ItemsRepository from './items.repository'
+import ItemsRepository from './ItemsRepository'
 import UsersRepository from './UsersRepository'
 import Repository from './repository'
 
