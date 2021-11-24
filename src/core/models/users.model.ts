@@ -14,7 +14,7 @@ export interface User extends Document {
   updatedAt?: Date
 }
 
-interface _userModel extends Model<User> {
+interface UserModelFindByEmail extends Model<User> {
   findByEmail(email: string): Promise<User | null>
 }
 
@@ -30,7 +30,7 @@ const userSchema = new Schema<User>({
     required: true,
     unique: true,
     // eslint-disable-next-line max-len
-    match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    match: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
   },
   active: {
     type: Boolean,
@@ -75,5 +75,5 @@ const updateMiddleware = function (this: any, next: any) {
 userSchema.pre('save', saveMiddleware)
 userSchema.pre('findOneAndUpdate', updateMiddleware)
 
-const UserModel = mongoose.model<User, _userModel>('User', userSchema)
+const UserModel = mongoose.model<User, UserModelFindByEmail>('User', userSchema)
 export default UserModel
