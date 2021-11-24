@@ -1,38 +1,8 @@
 import { Item, ItemModel } from '@models'
-import mongoose, { Model } from 'mongoose'
+import Repository from './repository'
 
-export default class ItemsRepository {
-  private model: Model<Item>
-
+export default class ItemsRepository extends Repository<Item> {
   constructor() {
-    this.model = ItemModel
-  }
-
-  public findAll = async (): Promise<Item[]> => this.model.find({ active: true }).then()
-
-  public findById = async (id: mongoose.Types.ObjectId): Promise<Item | null> => this.model.findOne({ _id: id, active: true }).then()
-
-  public insert = async (value: Item): Promise<mongoose.Types.ObjectId> => {
-    const document: Item = new ItemModel(value)
-    return document.save()
-      .then((doc) => doc._id)
-      .catch((er) => {
-        throw new Error(er)
-      })
-  }
-
-  public update = async (id: mongoose.Types.ObjectId, value: Item): Promise<Item | null> => {
-    const options = { runValidators: true, new: true }
-    return this.model.findByIdAndUpdate(id, value, options)
-      .then()
-      .catch((er) => {
-        throw new Error(er)
-      })
-  }
-
-  public delete = async (id: mongoose.Types.ObjectId): Promise<Item | null> => {
-    const value = { active: false }
-    const options = { new: true }
-    return this.model.findByIdAndUpdate(id, value, options).then()
+    super(ItemModel)
   }
 }
