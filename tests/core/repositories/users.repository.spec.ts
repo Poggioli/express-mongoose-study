@@ -140,8 +140,7 @@ describe('UsersRepository', () => {
       expect(result.updatedAt).toBeInstanceOf(Date)
     })
 
-    // ToDo implements when delete is done
-    xit(`Should return null
+    it(`Should return null
         When call findById
         With to a deleted User before`, async () => {
       const user: Partial<User> = {
@@ -151,7 +150,7 @@ describe('UsersRepository', () => {
       }
       const id = await repository.insert(user as User)
       expect(await repository.findById(id)).not.toBeNull()
-      // await repository.delete(id)
+      await repository.delete(id)
       expect(await repository.findById(id)).toBeNull()
     })
 
@@ -244,6 +243,38 @@ describe('UsersRepository', () => {
         await expect(repository.update(id, user as User)).rejects
           .toThrow('ValidationError: name: Path `name` (`b`) is shorter than the minimum allowed length (3).')
       })
+    })
+  })
+
+  describe('Delete method', () => {
+    it(`Should return the User
+        When delete works`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      const id = await repository.insert(user as User)
+      const insertedItem: User = await repository.findById(id) as User
+      expect(insertedItem.active).toBe(true)
+      const deletedItem: User = await repository.delete(id) as User
+      expect(deletedItem.name).toBe(user.name)
+      expect(deletedItem.email).toBe(user.email)
+      expect((deletedItem.updatedAt as Date).getTime() > (insertedItem.updatedAt as Date).getTime()).toBe(true)
+      expect(deletedItem.active).toBe(false)
+    })
+
+    it(`Should return null
+        When delete not found a document to delete`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      await repository.insert(user as User)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const result: User | null = await repository.delete(id)
+      expect(result).toBeNull()
     })
   })
 })

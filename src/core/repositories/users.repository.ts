@@ -29,4 +29,10 @@ export default class UsersRepository {
         throw new Error(er)
       })
   }
+
+  public delete = async (id: mongoose.Types.ObjectId): Promise<User | null> => {
+    const value = { active: false }
+    const options = { new: true }
+    return this.model.findByIdAndUpdate(id, value, options).then()
+  }
 }
