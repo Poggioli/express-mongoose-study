@@ -61,12 +61,7 @@ const hashPassword = (user: User, next: NextFunction) => {
 }
 
 const saveMiddleware = function (this: any, next: any) {
-  const user: User = this
-  if (!user.isModified('password')) {
-    next()
-  } else {
-    hashPassword(user, next)
-  }
+  hashPassword(this, next)
 }
 
 const updateMiddleware = function (this: any, next: any) {
@@ -78,7 +73,7 @@ const updateMiddleware = function (this: any, next: any) {
 }
 
 userSchema.pre('save', saveMiddleware)
-userSchema.pre('findByIdAndUpdate', updateMiddleware)
+userSchema.pre('findOneAndUpdate', updateMiddleware)
 
 const UserModel = mongoose.model<User, _userModel>('User', userSchema)
 export default UserModel

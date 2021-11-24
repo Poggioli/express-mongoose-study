@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
+import * as bcrypt from 'bcrypt'
 import db from '../../testsUtils/db'
 import { UsersRepository } from '../../../src/core/repositories'
-import { User } from '../../../src/core/models'
+import { User, UserModel } from '../../../src/core/models'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository
@@ -166,6 +167,83 @@ describe('UsersRepository', () => {
       const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
       const result: User | null = await repository.findById(id)
       expect(result).toBeNull()
+    })
+  })
+
+  describe('Update method', () => {
+    it(`Should return the User
+        When update works`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      const id = await repository.insert(user as User)
+      user.name = 'name 12345'
+      const oldItem: User = await repository.findById(id) as User
+      const result: User = await repository.update(id, user as User) as User
+      expect(result.name).toBe('name 12345')
+      expect(result.email).toBe('test@email.com')
+      expect((result.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
+    })
+
+    it('Should hashPassword when password change', async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      const id = await repository.insert(user as User)
+      user.password = 'newPassword'
+      const oldItem: User = await UserModel.findOne({ _id: id }, '+password') as User
+      await repository.update(id, user as User) as User
+      const newItem: User = await UserModel.findOne({ _id: id }, '+password') as User
+      expect(bcrypt.compareSync('password', newItem.password)).toBe(false)
+      expect((newItem.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
+    })
+
+    it('Not should hashPassword when password change', async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      const id = await repository.insert(user as User)
+      delete user.password
+      user.name = 'name 12345'
+      const oldItem: User = await UserModel.findOne({ _id: id }, '+password') as User
+      await repository.update(id, user as User) as User
+      const newItem: User = await UserModel.findOne({ _id: id }, '+password') as User
+      expect(bcrypt.compareSync('password', newItem.password)).toBe(true)
+      expect((newItem.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
+    })
+
+    it(`Should return null
+        When update not found a document to update`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        password: 'password',
+        email: 'test@email.com'
+      }
+      await repository.insert(user as User)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const result: User | null = await repository.update(id, user as User)
+      expect(result).toBeNull()
+    })
+
+    describe('Validation Errors', () => {
+      it(`Should run the validations
+          When update is called`, async () => {
+        const user: Partial<User> = {
+          name: 'name',
+          password: 'password',
+          email: 'test@email.com'
+        }
+        const id = await repository.insert(user as User)
+        user.name = 'b'
+        await expect(repository.update(id, user as User)).rejects
+          .toThrow('ValidationError: name: Path `name` (`b`) is shorter than the minimum allowed length (3).')
+      })
     })
   })
 })
