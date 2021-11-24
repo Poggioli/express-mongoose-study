@@ -8,7 +8,6 @@ sonarqubeScanner({
     'sonar.sourceEncoding': 'UTF-8',
     'sonar.language': 'ts',
     'sonar.sources': 'src',
-    'sonar.tests': 'tests',
     'sonar.inclusions': '**',
     'sonar.test.inclusions': 'src/**/*.spec.ts,tests/**/*.spec.ts',
     'sonar.coverage.exclusions': 'src/application.ts,src/environment.ts,src/index.ts,src/core/infra/logger/logger.ts',
