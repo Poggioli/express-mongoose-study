@@ -25,7 +25,7 @@ describe('UsersService', () => {
     spyResponseJson = jest.spyOn(response, 'json')
     spyResponseSend = jest.spyOn(response, 'send')
     repository = new UsersRepository()
-    service.repository = repository
+    service._repository = repository
   })
 
   describe('Insert method', () => {

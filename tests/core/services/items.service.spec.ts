@@ -26,7 +26,7 @@ describe('ItemsService', () => {
     spyResponseJson = jest.spyOn(response, 'json')
     spyResponseSend = jest.spyOn(response, 'send')
     repository = new ItemsRepository()
-    service.repository = repository
+    service._repository = repository
   })
 
   describe('FindAll method', () => {
