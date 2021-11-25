@@ -1,1 +1,1 @@
-# graphql-study
+# express-mongoose-study

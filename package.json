@@ -1,5 +1,5 @@
 {
-  "name": "graphql-study",
+  "name": "express-mongoose-study",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -17,19 +17,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Poggioli/graphql-study.git"
+    "url": "git+https://github.com/Poggioli/express-mongoose-study.git"
   },
   "author": "João Pogiolli",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Poggioli/graphql-study/issues"
+    "url": "https://github.com/Poggioli/express-mongoose-study/issues"
   },
   "jestSonar": {
     "reportPath": "coverage",
     "reportFile": "cobertura-coverage.xml",
     "indent": 2
   },
-  "homepage": "https://github.com/Poggioli/graphql-study#readme",
+  "homepage": "https://github.com/Poggioli/express-mongoose-study#readme",
   "devDependencies": {
     "@babel/cli": "7.16.0",
     "@babel/core": "7.16.0",

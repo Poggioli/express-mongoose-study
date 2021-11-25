@@ -1,9 +1,5 @@
-name: CI Build Pipeline
+name: CI Lint Pipeline
 on:
-  workflow_run:
-    workflows: ["CI Test Pipeline"]
-    types:
-      - completed
   push:
     branches: [develop]
   pull_request:
@@ -21,4 +17,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run babel
+      - run: npm run lint
