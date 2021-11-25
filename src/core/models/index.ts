@@ -1,5 +1,5 @@
-import ItemModel, { Item } from './items.model'
-import UserModel, { User } from './users.model'
+import ItemModel, { Item } from './itemsModel'
+import UserModel, { User } from './usersModel'
 
 export {
   ItemModel,

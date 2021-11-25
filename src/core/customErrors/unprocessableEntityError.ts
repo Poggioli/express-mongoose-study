@@ -2,7 +2,7 @@
 /* eslint-disable no-useless-constructor */
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 
-export default class UnprocessableEntity {
+export default class UnprocessableEntityError {
   public readonly statusCode: number = StatusCodes.UNPROCESSABLE_ENTITY
 
   public get message(): string {

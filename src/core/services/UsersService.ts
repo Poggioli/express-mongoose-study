@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@src/core/customErrors'
+import { BadRequestError, NotFoundError } from '@src/core/customErrors'
 import handleError from '@src/core/handlers'
 import { User } from '@src/core/models'
 import { UsersRepository } from '@src/core/repositories'
@@ -16,11 +16,11 @@ export default class UsersService extends Service<User, UsersRepository> {
       try {
         const { email } = req.query
         if (!email) {
-          throw new BadRequest('Email is required')
+          throw new BadRequestError('Email is required')
         }
         const data: User | null = await this._repository.findByEmail(email as string).catch((err) => { throw err })
         if (!data) {
-          throw new NotFound('Email not found')
+          throw new NotFoundError('Email not found')
         }
         resp.status(StatusCodes.NO_CONTENT).send()
       } catch (err: any) {

@@ -2,12 +2,12 @@
 /* eslint-disable no-useless-constructor */
 import { StatusCodes } from 'http-status-codes'
 
-export default class BadRequest {
-  public readonly statusCode: number = StatusCodes.BAD_REQUEST
+export default class NotFoundError {
+  public readonly statusCode: number = StatusCodes.NOT_FOUND
 
   public get message(): string {
     return this._message
   }
 
-  constructor(private _message: string = 'Bad Request') { }
+  constructor(private _message: string = 'Document Not Found') { }
 }

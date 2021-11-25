@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import handleError from '../../../src/core/handlers'
-import { NotFound } from '../../../src/core/customErrors'
+import { NotFoundError } from '../../../src/core/customErrors'
 
 describe('handleError', () => {
   let resp: Partial<Response>
@@ -38,12 +38,12 @@ describe('handleError', () => {
   it(`When is an instance of custom Error
       Then should return the right statusCode
       and the right message`, () => {
-    const notFound: NotFound = new NotFound()
-    handleError(resp as Response, notFound)
+    const notFoundError: NotFoundError = new NotFoundError()
+    handleError(resp as Response, notFoundError)
     expect(spyStatus).toHaveBeenCalledTimes(1)
-    expect(spyStatus).toHaveBeenCalledWith(notFound.statusCode)
+    expect(spyStatus).toHaveBeenCalledWith(notFoundError.statusCode)
     expect(spyJson).toHaveBeenCalledTimes(1)
-    expect(spyJson).toHaveBeenCalledWith(notFound.message)
+    expect(spyJson).toHaveBeenCalledWith(notFoundError.message)
   })
 
   it(`When is an unknown Error

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import db from '../../testsUtils/db'
 import { ItemsRepository } from '../../../src/core/repositories'
-import { Item } from '../../../src/core/models/items.model'
+import { Item } from '../../../src/core/models'
 
 describe('ItemsRepository', () => {
   let repository: ItemsRepository

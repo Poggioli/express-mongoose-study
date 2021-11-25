@@ -1,5 +1,5 @@
-import NotFound from './not-found.error'
-import UnprocessableEntity from './unprocessable-entity.error'
-import BadRequest from './bad-request.error'
+import NotFoundError from './notFoundError'
+import UnprocessableEntityError from './unprocessableEntityError'
+import BadRequestError from './badRequestError'
 
-export { NotFound, UnprocessableEntity, BadRequest }
+export { NotFoundError, UnprocessableEntityError, BadRequestError }

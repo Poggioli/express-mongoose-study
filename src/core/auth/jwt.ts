@@ -25,8 +25,8 @@ export default class Jwt {
   }
 
   public createJwt(payload: any): string {
-    function toBase64Url(content: string) {
-      return content
+    function toBase64Url(value: string) {
+      return value
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=/g, '')

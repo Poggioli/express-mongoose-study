@@ -1,3 +1,3 @@
-import handleError from './error.handler'
+import handleError from './handleError'
 
 export default handleError

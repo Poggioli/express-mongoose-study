@@ -1,4 +1,4 @@
-import { NotFound, UnprocessableEntity } from '@src/core/customErrors'
+import { NotFoundError, UnprocessableEntityError } from '@src/core/customErrors'
 import handleError from '@src/core/handlers'
 import { Repository } from '@src/core/repositories'
 import { NextFunction, Request, Response } from 'express'
@@ -29,10 +29,10 @@ export default abstract class Service<D extends Document, R extends Repository<D
         const id = this.getId(req)
         const data: D | null = await this._repository.findById(id).then().catch((err) => { throw err })
         if (!data) {
-          throw new NotFound()
+          throw new NotFoundError()
         }
         resp.status(StatusCodes.OK).json(data)
-      } catch (err: UnprocessableEntity | NotFound | any) {
+      } catch (err: UnprocessableEntityError | NotFoundError | any) {
         handleError(resp, err)
       }
     }
@@ -58,10 +58,10 @@ export default abstract class Service<D extends Document, R extends Repository<D
         const value: Partial<D> = this.mapperRequest(req.body, true)
         const data: D | null = await this._repository.update(id, value as D).then().catch((err) => { throw err })
         if (!data) {
-          throw new NotFound()
+          throw new NotFoundError()
         }
         resp.status(StatusCodes.OK).json(data)
-      } catch (err: UnprocessableEntity | NotFound | any) {
+      } catch (err: UnprocessableEntityError | NotFoundError | any) {
         handleError(resp, err)
       }
     }
@@ -82,7 +82,7 @@ export default abstract class Service<D extends Document, R extends Repository<D
   private getId(req: Request): mongoose.Types.ObjectId {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new UnprocessableEntity('Id format is not valid')
+      throw new UnprocessableEntityError('Id format is not valid')
     }
     return new mongoose.Types.ObjectId(id)
   }

@@ -1,4 +1,4 @@
-import ItemsController from './items.controller'
-import UsersController from './users.controller'
+import ItemsController from './itemsController'
+import UsersController from './usersController'
 
 export { ItemsController, UsersController }
