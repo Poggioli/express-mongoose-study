@@ -12,10 +12,11 @@ export interface User extends Document {
   active?: boolean,
   createdAt?: Date,
   updatedAt?: Date
+  matches(password: string): boolean
 }
 
 interface UserModelFindByEmail extends Model<User> {
-  findByEmail(email: string): Promise<User | null>
+  findByEmail(email: string, projection?: string): Promise<User | null>
 }
 
 const userSchema = new Schema<User>({
@@ -45,8 +46,12 @@ const userSchema = new Schema<User>({
   timestamps: true
 })
 
-userSchema.statics.findByEmail = function (email: string) {
-  return this.findOne({ email })
+userSchema.statics.findByEmail = function (email: string, projection?: string) {
+  return this.findOne({ email }, projection)
+}
+
+userSchema.methods.matches = function (password: string): boolean {
+  return bcrypt.compareSync(password, this.password)
 }
 
 const hashPassword = (user: User, next: NextFunction) => {

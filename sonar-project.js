@@ -4,7 +4,7 @@ const sonarqubeScanner = require('sonarqube-scanner')
 sonarqubeScanner({
   serverUrl: 'http://localhost:9000',
   options: {
-    'sonar.projectKey': 'expressApp',
+    'sonar.projectKey': 'express-mongoose-study',
     'sonar.sourceEncoding': 'UTF-8',
     'sonar.language': 'ts',
     'sonar.sources': 'src',
@@ -13,6 +13,6 @@ sonarqubeScanner({
     'sonar.coverage.exclusions': 'src/application.ts,src/environment.ts,src/index.ts,src/core/infra/logger/logger.ts',
     'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
     'sonar.testExecutionReportPaths': 'coverage/cobertura-coverage.xml',
-    'sonar.login': 'fa12185a6adce43368276abb366f096a1c69f66d'
+    'sonar.login': '8cd537cc6bd442814d216201e7d1c63592548195'
   }
 }, () => {})

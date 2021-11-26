@@ -277,4 +277,42 @@ describe('UsersRepository', () => {
       expect(result).toBeNull()
     })
   })
+
+  describe('Authenticate method', () => {
+    it(`Should return true
+        When find email and password match`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        email: 'email@test.com',
+        password: 'password'
+      }
+      await repository.insert(user as User)
+      const result = await repository.authenticate(user as User)
+      expect(result).toBe(true)
+    })
+
+    it(`Should return false
+        When cannot find email`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        email: 'email@test.com',
+        password: 'password'
+      }
+      await repository.insert(user as User)
+      const result = await repository.authenticate({ email: 'emaill@test.com', password: 'password' } as User)
+      expect(result).toBe(false)
+    })
+
+    it(`Should return false
+        When find email but password not match`, async () => {
+      const user: Partial<User> = {
+        name: 'name',
+        email: 'email@test.com',
+        password: 'password'
+      }
+      await repository.insert(user as User)
+      const result = await repository.authenticate({ email: 'email@test.com', password: 'passwordd' } as User)
+      expect(result).toBe(false)
+    })
+  })
 })
