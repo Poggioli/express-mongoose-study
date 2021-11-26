@@ -17,6 +17,7 @@ describe('UsersService', () => {
   beforeEach(() => {
     response = {
       status: () => response as Response,
+      set: () => response as Response,
       json: jest.fn(),
       send: jest.fn()
     }
@@ -407,6 +408,71 @@ describe('UsersService', () => {
         }
       }
       const call = await service.delete()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Error message')
+    })
+  })
+
+  describe('Authenticate method', () => {
+    it(`Should return status code 200
+        And set header with jwtToken`, async () => {
+      expect.assertions(4)
+      jest.spyOn(response, 'set')
+      const user: Partial<User> = {
+        email: 'email@test.com',
+        password: 'password'
+      }
+
+      request = {
+        body: user
+      }
+
+      jest.spyOn(repository, 'authenticate').mockResolvedValue(user as User)
+      const call = await service.authenticate()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(spyResponseSend).toHaveBeenCalledTimes(1)
+      expect(response.set).toHaveBeenCalledTimes(1)
+    })
+
+    it('Should return status code 401', async () => {
+      expect.assertions(4)
+      const user: Partial<User> = {
+        email: 'email@test.com',
+        password: 'password'
+      }
+
+      request = {
+        body: user
+      }
+
+      jest.spyOn(repository, 'authenticate').mockResolvedValue(null)
+      const call = await service.authenticate()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.FORBIDDEN)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Forbidden')
+    })
+
+    it(`Should return an error message
+        And status code 500
+        When call Authenticate`, async () => {
+      expect.assertions(4)
+      const user: Partial<User> = {
+        email: 'email@test.com',
+        password: 'password'
+      }
+
+      request = {
+        body: user
+      }
+      jest.spyOn(repository, 'authenticate').mockRejectedValueOnce({ message: 'Error message' })
+      const call = await service.authenticate()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)

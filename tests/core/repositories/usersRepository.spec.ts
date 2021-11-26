@@ -288,7 +288,7 @@ describe('UsersRepository', () => {
       }
       await repository.insert(user as User)
       const result = await repository.authenticate(user as User)
-      expect(result).toBe(true)
+      expect(result).toBeTruthy()
     })
 
     it(`Should return false
@@ -300,7 +300,7 @@ describe('UsersRepository', () => {
       }
       await repository.insert(user as User)
       const result = await repository.authenticate({ email: 'emaill@test.com', password: 'password' } as User)
-      expect(result).toBe(false)
+      expect(result).toBeFalsy()
     })
 
     it(`Should return false
@@ -312,7 +312,7 @@ describe('UsersRepository', () => {
       }
       await repository.insert(user as User)
       const result = await repository.authenticate({ email: 'email@test.com', password: 'passwordd' } as User)
-      expect(result).toBe(false)
+      expect(result).toBeFalsy()
     })
   })
 })
