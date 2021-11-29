@@ -12,8 +12,8 @@
     "sonar": "npm run test && node sonar-project.js",
     "start": "export NODE_ENV=prod && npm run build && node dist/index.js",
     "start:dev": "export NODE_ENV=dev && nodemon",
-    "test": "export NODE_ENV=test && npm run clear-test && jest --runInBand --coverage --no-cache --forceExit --silent --detectOpenHandles",
-    "test:no-silent": "export NODE_ENV=test && npm run clear-test && jest --runInBand --coverage --no-cache --forceExit --detectOpenHandles"
+    "test": "export NODE_ENV=test && npm run clear-test && TZ=UTC jest --runInBand --coverage --no-cache --forceExit --silent --detectOpenHandles",
+    "test:no-silent": "export NODE_ENV=test && npm run clear-test && TZ=UTC jest --runInBand --coverage --no-cache --forceExit --detectOpenHandles"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose from 'mongoose'
-import { advanceTo, clear } from 'jest-date-mock'
 import { User } from '../../../src/core/models'
 import { UsersRepository } from '../../../src/core/repositories'
 import { UsersService } from '../../../src/core/services'
@@ -420,10 +419,12 @@ describe('UsersService', () => {
   describe('Authenticate method', () => {
     it(`Should return status code 204
         And set header with jwtToken`, async () => {
-      advanceTo(new Date(2021, 8, 8, 0, 0, 0))
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date(2021, 8, 8, 0, 0, 0, 0).getTime())
       expect.assertions(5)
       // eslint-disable-next-line max-len
-      const jwtToken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVtYWlsQHRlc3QuY29tIiwiZXhwIjoxNjMxMTU2NDAwfQ.oabIU_2BaAif600ZnS08bGFGdctY9CXxCKdIbqMG6Ww'
+      const jwtToken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVtYWlsQHRlc3QuY29tIiwiZXhwIjoxNjMxMTQ1NjAwfQ.X54ILyp5MCU_6cHwRslrv6YzcBW536B9z1t1gd3k_TI'
       jest.spyOn(response, 'cookie')
       const user: Partial<User> = {
         email: 'email@test.com',
@@ -450,7 +451,7 @@ describe('UsersService', () => {
           httpOnly: true
         }
       )
-      clear()
+      jest.useRealTimers()
     })
 
     it('Should return status code 401', async () => {

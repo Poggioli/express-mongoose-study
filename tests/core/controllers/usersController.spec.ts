@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import http from 'http'
 import request from 'supertest'
 import mongoose from 'mongoose'
@@ -111,7 +112,7 @@ describe('ItemsController', () => {
   it(`Should return a statusCode 204
       And jwtToken in cookie
       When call the endpoint POST /users/authenticate`, async () => {
-    advanceTo(new Date(2021, 8, 8, 0, 0, 0))
+    advanceTo(new Date(2021, 8, 8, 0, 0, 0, 0))
     const item: Partial<User> = {
       name: 'name',
       email: 'teste@email.com',
@@ -128,7 +129,7 @@ describe('ItemsController', () => {
         expect(result.statusCode).toBe(StatusCodes.NO_CONTENT)
         const expectedsCookies: string[] = [
           // eslint-disable-next-line max-len
-          'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoidGVzdGVAZW1haWwuY29tIiwiZXhwIjoxNjMxMTU2NDAwfQ.JcWi0ZirZKalXYLwM2mngCNsuhNXkKvKFWr_l9wYydI',
+          'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoidGVzdGVAZW1haWwuY29tIiwiZXhwIjoxNjMxMTQ1NjAwfQ.uOfWudfNQWQJuX21Ql5w3sC7OxQRKy5KOTx27Of-XEw',
           'Path=/',
           'HttpOnly',
           'Secure'
