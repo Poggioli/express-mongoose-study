@@ -35,12 +35,22 @@ export default class UsersService extends Service<User, UsersRepository> {
     return async (req: Request, resp: Response): Promise<void> => {
       try {
         const value: User = this.mapperRequest(req.body) as User
-        const user: User | null = await this._repository.authenticate(value)
+        let user: User | null = await this._repository.authenticate(value)
         if (!user) {
           throw new ForbiddenError()
         }
+        user = this.mapperRequest(user, true) as User
         const jwt: string = new Jwt().createJwt(user)
-        resp.status(StatusCodes.OK).set('jwtToken', jwt).send()
+        resp.status(StatusCodes.NO_CONTENT)
+          .cookie(
+            'jwtToken',
+            'Bearer '.concat(jwt),
+            {
+              path: '/',
+              secure: true,
+              httpOnly: true
+            }
+          ).send()
       } catch (err: any) {
         handleError(resp, err)
       }

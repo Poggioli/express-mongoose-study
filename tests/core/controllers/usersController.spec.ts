@@ -1,6 +1,8 @@
 import http from 'http'
 import request from 'supertest'
 import mongoose from 'mongoose'
+import { StatusCodes } from 'http-status-codes'
+import { advanceTo, clear } from 'jest-date-mock'
 import db from '../../testsUtils/db'
 import Application from '../../../src/application'
 import { User } from '../../../src/core/models'
@@ -104,5 +106,36 @@ describe('ItemsController', () => {
         expect(result.statusCode).toBe(204)
         expect(result.body).toStrictEqual({})
       })
+  })
+
+  it(`Should return a statusCode 204
+      And jwtToken in cookie
+      When call the endpoint POST /users/authenticate`, async () => {
+    advanceTo(new Date(2021, 8, 8, 0, 0, 0))
+    const item: Partial<User> = {
+      name: 'name',
+      email: 'teste@email.com',
+      password: 'password'
+    }
+    await request(server)
+      .post('/v1/users')
+      .send(item)
+
+    await request(server)
+      .post('/v1/users/authenticate')
+      .send(item)
+      .then((result) => {
+        expect(result.statusCode).toBe(StatusCodes.NO_CONTENT)
+        const expectedsCookies: string[] = [
+          // eslint-disable-next-line max-len
+          'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoidGVzdGVAZW1haWwuY29tIiwiZXhwIjoxNjMxMTU2NDAwfQ.JcWi0ZirZKalXYLwM2mngCNsuhNXkKvKFWr_l9wYydI',
+          'Path=/',
+          'HttpOnly',
+          'Secure'
+        ]
+        const cookies: string[] = result.header['set-cookie'][0].split(';').map((v: string) => v.trim())
+        expect(cookies).toStrictEqual(expectedsCookies)
+      })
+    clear()
   })
 })

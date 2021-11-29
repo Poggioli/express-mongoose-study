@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose from 'mongoose'
+import { advanceTo, clear } from 'jest-date-mock'
 import { User } from '../../../src/core/models'
 import { UsersRepository } from '../../../src/core/repositories'
 import { UsersService } from '../../../src/core/services'
@@ -17,7 +18,7 @@ describe('UsersService', () => {
   beforeEach(() => {
     response = {
       status: () => response as Response,
-      set: () => response as Response,
+      cookie: () => response as Response,
       json: jest.fn(),
       send: jest.fn()
     }
@@ -417,10 +418,13 @@ describe('UsersService', () => {
   })
 
   describe('Authenticate method', () => {
-    it(`Should return status code 200
+    it(`Should return status code 204
         And set header with jwtToken`, async () => {
-      expect.assertions(4)
-      jest.spyOn(response, 'set')
+      advanceTo(new Date(2021, 8, 8, 0, 0, 0))
+      expect.assertions(5)
+      // eslint-disable-next-line max-len
+      const jwtToken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVtYWlsQHRlc3QuY29tIiwiZXhwIjoxNjMxMTU2NDAwfQ.oabIU_2BaAif600ZnS08bGFGdctY9CXxCKdIbqMG6Ww'
+      jest.spyOn(response, 'cookie')
       const user: Partial<User> = {
         email: 'email@test.com',
         password: 'password'
@@ -434,9 +438,19 @@ describe('UsersService', () => {
       const call = await service.authenticate()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
-      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NO_CONTENT)
       expect(spyResponseSend).toHaveBeenCalledTimes(1)
-      expect(response.set).toHaveBeenCalledTimes(1)
+      expect(response.cookie).toHaveBeenCalledTimes(1)
+      expect(response.cookie).toHaveBeenCalledWith(
+        'jwtToken',
+        jwtToken,
+        {
+          path: '/',
+          secure: true,
+          httpOnly: true
+        }
+      )
+      clear()
     })
 
     it('Should return status code 401', async () => {
