@@ -89,6 +89,38 @@ describe('ItemsController', () => {
       })
   })
 
+  it(`Should update user
+      When call the endpoint UPDATE /users/:id`, async () => {
+    const item: Partial<User> = {
+      name: 'name',
+      email: 'teste@email.com',
+      password: 'password'
+    }
+    const id: mongoose.Types.ObjectId = await request(server)
+      .post('/v1/users')
+      .send(item)
+      .then((result) => result.body)
+
+    await request(server)
+      .get('/v1/users/'.concat(id.toString()))
+      .then((result) => {
+        expect(result.statusCode).toBe(200)
+        const itemReturned: User = result.body
+        expect(itemReturned.name).toBe('name')
+      })
+
+    item.name = 'new name to update'
+
+    await request(server)
+      .put('/v1/users/'.concat(id.toString()))
+      .send(item)
+      .then((result) => {
+        expect(result.statusCode).toBe(200)
+        const itemReturned: User = result.body
+        expect(itemReturned.name).toBe('new name to update')
+      })
+  })
+
   it(`Should return an empty body
       When call the endpoint DELETE /users/:id`, async () => {
     const item: Partial<User> = {

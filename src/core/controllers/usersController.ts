@@ -10,6 +10,7 @@ export default class UsersController {
     this.findById(router, service)
     this.delete(router, service)
     this.authenticate(router, service)
+    this.update(router, service)
   }
 
   private static insert(router: Router, service: UsersService): void {
@@ -35,5 +36,10 @@ export default class UsersController {
   private static authenticate(router: Router, service: UsersService): void {
     const url: string = '/'.concat(UserModel.collection.name, '/authenticate')
     router.post(url, [service.authenticate()])
+  }
+
+  private static update(router: Router, service: UsersService): void {
+    const url: string = '/'.concat(UserModel.collection.name, '/:id')
+    router.put(url, [service.update()])
   }
 }
