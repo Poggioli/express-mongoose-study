@@ -19,7 +19,7 @@ This is a study project using the express and mongoose libraries, it aims to lea
 - [Git](https://git-scm.com/downloads)
 - [Node.js v16.13.0](https://nodejs.org/download/release/v16.13.0/)
 - [Docker](https://www.docker.com/get-started)
-- [MongoDB](https://www.mongodb.com/try/download/community) or use [docker-compose file](https://github.com/Poggioli/express-mongoose-study/blob/develop/docker-compose.yml)
+- [MongoDB](https://www.mongodb.com/try/download/community) or use [docker-compose file](https://github.com/Poggioli/express-mongoose-study/blob/main/docker-compose.yml)
 
 ### Resources available
 
@@ -40,21 +40,32 @@ Endpoints `/v1`:
 - DELETE `/users/:id`
 - POST `/users/authenticate`
 
+### Docker image
+
+To create a docker image of this app just run the follow command
+
+```sh
+docker build . -t express-mongoose-study &&
+docker run -p 3002:3002 express-mongoose-study
+```
+
+The application will respond on port 3002, to test if it went up correctly, just access [health endpoint](localhost:3002/health)
+
 ### Getting started
 
 #### Run locally
 
 ```sh
-1- npm install
-2- docker-compose up mongoDB
-3- npm run start:dev
+npm install &&
+docker-compose up mongoDB &&
+npm run start:dev
 ```
 
 #### Run tests
 
 ```sh
-1- npm install
-2- npm run test
+npm install &&
+npm run test
 ```
 
 The results can be seen in coverage/index.html
@@ -62,9 +73,9 @@ The results can be seen in coverage/index.html
 #### Run SonarQube quality gate
 
 ```sh
-1- npm install
-2- docker-compose up sonarqube
-3- npm run sonar
+npm install &&
+docker-compose up sonarqube &&
+npm run sonar
 ```
 
 The results can be seen in [localhost:9000](http://localhost:9000)
