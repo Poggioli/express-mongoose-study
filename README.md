@@ -53,7 +53,7 @@ docker build . -t express-mongoose-study &&
 docker run -p 3002:3002 express-mongoose-study
 ```
 
-The application will respond on port 3002, to test if it went up correctly, just access [health endpoint](localhost:3002/health)
+The application will respond on port 3002, to test if it went up correctly, just access [health endpoint](http://localhost:3002/health)
 
 ### Getting started
 
