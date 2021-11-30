@@ -1,0 +1,13 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.workingDirectories": ["./src"],
+  "eslint.validate": ["typescript"],
+  "eslint.codeActionsOnSave.mode": "all",
+  "editor.formatOnSave": true,
+  "files.encoding": "utf8",
+  "files.insertFinalNewline": true,
+  "editor.minimap.maxColumn": 120,
+  "editor.tabSize": 2
+}

@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  mongoDB:
+    container_name: MongoDB
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootPass1234
+      MONGO_INITDB_DATABASE: graphql
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+    command: mongod
+
+  sonarqube:
+    container_name: SonarQube
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+      - "9092:9092"

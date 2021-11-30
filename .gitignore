@@ -21,6 +21,7 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+test-report.xml
 
 # nyc test coverage
 .nyc_output
@@ -102,3 +103,17 @@ dist
 
 # TernJS port file
 .tern-port
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+jest_html_reporters.html
+junit.xml
+mongoDB/*
+
+#Sonar
+.scannerwork

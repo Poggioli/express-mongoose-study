@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es6"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "paths": {
+      "@infra/*": ["./src/core/infra/*"],
+      "@src/*": ["./src/*"],
+      "@models": ["./src/core/models/index"],
+      "@repositories": ["./src/core/repositories/index"],
+      "@services": ["./src/core/services/index"],
+      "@controllers": ["./src/core/controllers/index"],
+      "@handlers": ["./src/core/handlers/index"],
+      "@errors": ["./src/core/customErrors/index"]
+    },
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["jest.config.js"]
+}
