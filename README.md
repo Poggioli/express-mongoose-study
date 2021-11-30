@@ -2,6 +2,10 @@
 
 ---
 
+![Build](https://github.com/Poggioli/express-mongoose-study/actions/workflows/build.yml/badge.svg)
+![Lint](https://github.com/Poggioli/express-mongoose-study/actions/workflows/lint.yml/badge.svg)
+![Test](https://github.com/Poggioli/express-mongoose-study/actions/workflows/test.yml/badge.svg)
+
 ## About the project
 
 This is a study project using the express and mongoose libraries, it aims to learn more about creating RESTFULL API's and about non-relational databases, it also serves to learn how to assemble a CI/CD pipeline using github Actions
