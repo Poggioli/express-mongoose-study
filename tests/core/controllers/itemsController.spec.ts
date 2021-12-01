@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import db from '../../testsUtils/db'
 import Application from '../../../src/application'
 import { Item } from '../../../src/core/models'
+import { jwtInValid, jwtValid } from '../../testsUtils/jwt'
 
 describe('ItemsController', () => {
   let server: http.Server
@@ -13,6 +14,10 @@ describe('ItemsController', () => {
       .then(() => db.connect())
     const app: Application = new Application()
     server = (await app.bootstrap()).listening()
+  })
+
+  beforeEach(async () => {
+    await db.createDefaultUser()
   })
 
   afterEach(async () => { await db.clear() })
@@ -32,20 +37,39 @@ describe('ItemsController', () => {
       })
   })
 
-  it(`Should return an ObjectId value
+  describe('insert', () => {
+    it(`Should return an ObjectId value
       When call the endpoint POST /items`, async () => {
-    const item: Partial<Item> = {
-      name: 'name',
-      price: 1,
-      description: 'description'
-    }
-    await request(server)
-      .post('/v1/items')
-      .send(item)
-      .then((result) => {
-        expect(result.statusCode).toBe(201)
-        expect(mongoose.Types.ObjectId.isValid(result.body)).toBe(true)
-      })
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtValid)
+        .send(item)
+        .then((result) => {
+          expect(result.statusCode).toBe(201)
+          expect(mongoose.Types.ObjectId.isValid(result.body)).toBe(true)
+        })
+    })
+
+    it(`Should return 403
+        When cookie is invalid`, async () => {
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtInValid)
+        .send(item)
+        .then((result) => {
+          expect(result.statusCode).toBe(403)
+        })
+    })
   })
 
   it(`Should return an Item
@@ -57,6 +81,7 @@ describe('ItemsController', () => {
     }
     const id: mongoose.Types.ObjectId = await request(server)
       .post('/v1/items')
+      .set('Cookie', jwtValid)
       .send(item)
       .then((result) => result.body)
 
@@ -74,23 +99,48 @@ describe('ItemsController', () => {
       })
   })
 
-  it(`Should return an empty body
+  describe('delete', () => {
+    it(`Should return an empty body
       When call the endpoint DELETE /items/:id`, async () => {
-    const item: Partial<Item> = {
-      name: 'name',
-      price: 1,
-      description: 'description'
-    }
-    const id: mongoose.Types.ObjectId = await request(server)
-      .post('/v1/items')
-      .send(item)
-      .then((result) => result.body)
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id: mongoose.Types.ObjectId = await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtValid)
+        .send(item)
+        .then((result) => result.body)
 
-    await request(server)
-      .delete('/v1/items/'.concat(id.toString()))
-      .then((result) => {
-        expect(result.statusCode).toBe(204)
-        expect(result.body).toStrictEqual({})
-      })
+      await request(server)
+        .delete('/v1/items/'.concat(id.toString()))
+        .set('Cookie', jwtValid)
+        .then((result) => {
+          expect(result.statusCode).toBe(204)
+          expect(result.body).toStrictEqual({})
+        })
+    })
+
+    it(`Should return 403
+        When cookie is invalid`, async () => {
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id: mongoose.Types.ObjectId = await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtValid)
+        .send(item)
+        .then((result) => result.body)
+
+      await request(server)
+        .delete('/v1/items/'.concat(id.toString()))
+        .set('Cookie', jwtInValid)
+        .then((result) => {
+          expect(result.statusCode).toBe(403)
+        })
+    })
   })
 })

@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
+import { UserModel } from '../../src/core/models'
 
 class MongoD {
   private _mongod: any
@@ -31,6 +32,11 @@ class MongoD {
       const colletion = colletions[key]
       await colletion.deleteMany({})
     }
+  }
+
+  public async createDefaultUser(): Promise<void> {
+    const document = new UserModel({ name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd' })
+    await document.save().then()
   }
 }
 
