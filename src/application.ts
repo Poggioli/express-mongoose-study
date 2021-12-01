@@ -2,6 +2,7 @@ import logger from '@infra/logger'
 import router from '@src/core/entrypoint'
 import compression from 'compression'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import actuator from 'express-actuator'
 import helmet from 'helmet'
@@ -72,6 +73,9 @@ class Application {
 
       logger.info('Configuring Middlewares: Compression')
       this._app.use(compression())
+
+      logger.info('Configuring Middlewares: CookieParser')
+      this._app.use(cookieParser())
 
       resolve(this)
     })

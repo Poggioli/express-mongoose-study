@@ -17,43 +17,40 @@ export default class Jwt {
       .update(jwt)
       .digest()
       .toString('base64')
-    const realSignatureUrl = realSignature
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '')
+    const realSignatureUrl = this.toBase64Url(realSignature)
     return signature === realSignatureUrl && this.validateExpiration(payload)
   }
 
   public createJwt(payload: any): string {
-    function toBase64Url(value: string) {
-      return value
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '')
-    }
-
     const header = '{"typ":"JWT","alg":"HS256"}'
     const headerBase64 = Buffer.from(header).toString('base64')
-    const headerBase64Url = toBase64Url(headerBase64)
+    const headerBase64Url = this.toBase64Url(headerBase64)
 
     // eslint-disable-next-line no-param-reassign
     payload.exp = this.getExpirationTime()
     const payloadString = JSON.stringify(payload)
     const payloadBase64 = Buffer.from(payloadString).toString('base64')
-    const payloadBase64Url = toBase64Url(payloadBase64)
+    const payloadBase64Url = this.toBase64Url(payloadBase64)
 
     const content = headerBase64Url.concat('.', payloadBase64Url)
     const signature = createHmac('sha256', Buffer.from((environment.auth.jwtSecret as string), 'base64'))
       .update(content)
       .digest()
       .toString('base64')
-    const signatureUrl = toBase64Url(signature)
+    const signatureUrl = this.toBase64Url(signature)
 
     return content.concat('.', signatureUrl)
   }
 
   public getPayload<T>(jwtToken: string): T {
     return this.parsePayload<T>(jwtToken)
+  }
+
+  private toBase64Url(value: string) {
+    return value
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '')
   }
 
   private parsePayload<T>(jwtToken: string): T {

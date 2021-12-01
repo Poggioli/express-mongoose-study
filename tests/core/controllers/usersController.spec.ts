@@ -41,7 +41,7 @@ describe('ItemsController', () => {
       })
   })
 
-  it(`Should return a statusCode 204
+  it(`Should return a statusCode 200
       When call the endpoint GET /users/email?email=teste@email.com`, async () => {
     const queryParams: URLSearchParams = new URLSearchParams({
       email: 'teste@email.com'
@@ -58,8 +58,13 @@ describe('ItemsController', () => {
     await request(server)
       .get('/v1/users/email?'.concat(queryParams.toString()))
       .then((result) => {
-        expect(result.statusCode).toBe(204)
-        expect(result.body).toStrictEqual({})
+        expect(result.statusCode).toBe(200)
+        const itemReturned: User = result.body
+        expect(itemReturned.name).toBe('name')
+        expect(itemReturned.password).toBeUndefined()
+        expect(itemReturned.email).toBe('teste@email.com')
+        expect(itemReturned.createdAt).toBeDefined()
+        expect(itemReturned.updatedAt).toBeDefined()
       })
   })
 
@@ -163,8 +168,7 @@ describe('ItemsController', () => {
           // eslint-disable-next-line max-len
           'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoidGVzdGVAZW1haWwuY29tIiwiZXhwIjoxNjMxMTQ1NjAwfQ.uOfWudfNQWQJuX21Ql5w3sC7OxQRKy5KOTx27Of-XEw',
           'Path=/',
-          'HttpOnly',
-          'Secure'
+          'HttpOnly'
         ]
         const cookies: string[] = result.header['set-cookie'][0].split(';').map((v: string) => v.trim())
         expect(cookies).toStrictEqual(expectedsCookies)

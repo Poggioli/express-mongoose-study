@@ -1,9 +1,10 @@
-import Jwt from '@src/core/auth'
+import { Jwt } from '@src/core/auth'
 import { BadRequestError, NotFoundError } from '@src/core/customErrors'
 import ForbiddenError from '@src/core/customErrors/forbiddenError'
 import handleError from '@src/core/handlers'
 import { User } from '@src/core/models'
 import { UsersRepository } from '@src/core/repositories'
+import environment from '@src/environment'
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import Service from './service'
@@ -24,7 +25,7 @@ export default class UsersService extends Service<User, UsersRepository> {
         if (!data) {
           throw new NotFoundError('Email not found')
         }
-        resp.status(StatusCodes.NO_CONTENT).send()
+        resp.status(StatusCodes.OK).json(data)
       } catch (err: any) {
         handleError(resp, err)
       }
@@ -47,7 +48,7 @@ export default class UsersService extends Service<User, UsersRepository> {
             'Bearer '.concat(jwt),
             {
               path: '/',
-              secure: true,
+              secure: environment.isProduction,
               httpOnly: true
             }
           ).send()

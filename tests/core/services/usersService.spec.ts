@@ -104,7 +104,7 @@ describe('UsersService', () => {
   })
 
   describe('FindByEmail method', () => {
-    it(`Should return a status code 204
+    it(`Should return a status code 200
         When email exists`, async () => {
       expect.assertions(3)
       const user: Partial<User> = {
@@ -121,8 +121,8 @@ describe('UsersService', () => {
       const call = await service.findByEmail()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
-      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NO_CONTENT)
-      expect(spyResponseSend).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
     })
 
     it(`Should return a status code 404
@@ -447,7 +447,7 @@ describe('UsersService', () => {
         jwtToken,
         {
           path: '/',
-          secure: true,
+          secure: false,
           httpOnly: true
         }
       )

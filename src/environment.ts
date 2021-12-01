@@ -5,6 +5,7 @@ import * as pkg from '../package.json'
 
 const environment = {
   node: process.env.NODE_ENV || 'dev',
+  isProduction: process.env.NODE_ENV === 'prod',
   app: {
     port: config.get('app.port'),
     name: pkg.name

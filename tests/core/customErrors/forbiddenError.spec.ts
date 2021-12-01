@@ -8,7 +8,7 @@ describe('ForbiddenError', () => {
   })
 
   it(`If not set message
-      Should return Document Forbidden
+      Should return Forbidden
       When call message`, () => {
     const forbiddenError: ForbiddenError = new ForbiddenError()
     expect(forbiddenError.message).toBe('Forbidden')
