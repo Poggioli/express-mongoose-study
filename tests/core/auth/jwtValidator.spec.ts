@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { jwtValidator } from '../../../src/core/auth'
 import { UnauthorizedError, ForbiddenError } from '../../../src/core/customErrors'
+import { jwtValid, jwtInvalid } from '../../testsUtils/jwt'
 
 describe('jwtValidator', () => {
   let request: Partial<Request>
@@ -55,8 +56,7 @@ describe('jwtValidator', () => {
     const call = jwtValidator()
     request = {
       headers: {
-        // eslint-disable-next-line max-len
-        cookie: 'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdGUgand0IiwiZW1haWwiOiJ0ZXN0ZUBlbWFpbC5jb20iLCJleHAiOjE2Mzg0MTIwMDN9.ebqAOVpD5irASR0bx4YTPGNf7mS1gP8EdSGQRSx6I_c'
+        cookie: jwtInvalid
       }
     }
     await call(request as Request, response as Response, next)
@@ -72,8 +72,7 @@ describe('jwtValidator', () => {
     const call = jwtValidator()
     request = {
       headers: {
-        // eslint-disable-next-line max-len
-        cookie: 'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdGUgand0IiwiZW1haWwiOiJ0ZXN0ZUBlbWFpbC5jb20iLCJleHAiOjE2Mzg0MTIwMDN9.KB9KntKn9MM5G3u1BBmEUighkaAjShP2msggH_6O1qI'
+        cookie: jwtValid
       }
     }
     await call(request as Request, response as Response, next)

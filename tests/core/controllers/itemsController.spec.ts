@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import db from '../../testsUtils/db'
 import Application from '../../../src/application'
 import { Item } from '../../../src/core/models'
-import { jwtInValid, jwtValid } from '../../testsUtils/jwt'
+import { jwtInvalid, jwtValid } from '../../testsUtils/jwt'
 
 describe('ItemsController', () => {
   let server: http.Server
@@ -64,7 +64,7 @@ describe('ItemsController', () => {
       }
       await request(server)
         .post('/v1/items')
-        .set('Cookie', jwtInValid)
+        .set('Cookie', jwtInvalid)
         .send(item)
         .then((result) => {
           expect(result.statusCode).toBe(403)
@@ -147,7 +147,7 @@ describe('ItemsController', () => {
       await request(server)
         .put('/v1/items/'.concat(id.toString()))
         .send(item)
-        .set('Cookie', jwtInValid)
+        .set('Cookie', jwtInvalid)
         .then((result) => {
           expect(result.statusCode).toBe(403)
         })
@@ -192,7 +192,7 @@ describe('ItemsController', () => {
 
       await request(server)
         .delete('/v1/items/'.concat(id.toString()))
-        .set('Cookie', jwtInValid)
+        .set('Cookie', jwtInvalid)
         .then((result) => {
           expect(result.statusCode).toBe(403)
         })
