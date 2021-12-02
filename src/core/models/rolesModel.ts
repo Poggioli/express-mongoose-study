@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import {
   Document, model, Model, Schema
 } from 'mongoose'
@@ -9,11 +10,21 @@ import {
  * USER = VVNFUg== 0
  */
 
+export enum CodeRoles {
+  SYSADM = 'U1lTQURN',
+  ADM = 'QURN',
+  SYSUSER = 'U1lTVVNFUg==',
+  USER = 'VVNFUg=='
+}
+
 export interface Role extends Document {
   name: string,
   description: string,
   code: string,
-  access: number
+  access: number,
+  active: boolean,
+  createdAt?: Date,
+  updatedAt?: Date
 }
 
 const roleSchema = new Schema<Role>({
@@ -25,16 +36,21 @@ const roleSchema = new Schema<Role>({
   description: {
     type: String,
     required: true,
+    maxlength: 300,
     trim: true
   },
   code: {
     type: String,
-    enum: ['SYSADM', 'ADM', 'SYSUSER', 'USER'],
+    enum: CodeRoles,
     required: true
   },
   access: {
     type: Number,
     required: true
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true
