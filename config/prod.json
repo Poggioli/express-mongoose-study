@@ -4,7 +4,7 @@
   },
   "db": {
     "useAuth": true,
-    "url": "mongodb://{username}:{password}@localhost:27017",
+    "url": "mongodb://{username}:{password}@localhost:27017/express-mongoose-study?authSource=admin&connectTimeoutMS=3000",
     "username": "root",
     "password": "rootPass1234"
   },
