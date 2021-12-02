@@ -10,6 +10,7 @@ export default class ItemsController {
     this.insert(router, service)
     this.findById(router, service)
     this.delete(router, service)
+    this.update(router, service)
   }
 
   private static findAll(router: Router, service: ItemsService): void {
@@ -39,6 +40,14 @@ export default class ItemsController {
     router.delete(url, [
       jwtValidator(),
       service.delete()
+    ])
+  }
+
+  private static update(router: Router, service: ItemsService): void {
+    const url: string = '/'.concat(ItemModel.collection.name, '/:id')
+    router.put(url, [
+      jwtValidator(),
+      service.update()
     ])
   }
 }

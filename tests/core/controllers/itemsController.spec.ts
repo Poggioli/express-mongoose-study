@@ -99,6 +99,61 @@ describe('ItemsController', () => {
       })
   })
 
+  describe('update', () => {
+    it(`Should return an Item
+        When call the endpoint PUT /items/:id`, async () => {
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id: mongoose.Types.ObjectId = await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtValid)
+        .send(item)
+        .then((result) => result.body)
+
+      item.name = 'new name'
+      await request(server)
+        .put('/v1/items/'.concat(id.toString()))
+        .send(item)
+        .set('Cookie', jwtValid)
+        .then((result) => {
+          expect(result.statusCode).toBe(200)
+          const itemReturned: Item = result.body
+          expect(itemReturned.name).toBe('new name')
+          expect(itemReturned.price).toBe(1)
+          expect(itemReturned.description).toBe('description')
+          expect(itemReturned._id).toBe(id)
+          expect(itemReturned.createdAt).toBeDefined()
+          expect(itemReturned.updatedAt).toBeDefined()
+        })
+    })
+
+    it(`Should return 403
+        When cookie is invalid`, async () => {
+      const item: Partial<Item> = {
+        name: 'name',
+        price: 1,
+        description: 'description'
+      }
+      const id: mongoose.Types.ObjectId = await request(server)
+        .post('/v1/items')
+        .set('Cookie', jwtValid)
+        .send(item)
+        .then((result) => result.body)
+
+      item.name = 'new name'
+      await request(server)
+        .put('/v1/items/'.concat(id.toString()))
+        .send(item)
+        .set('Cookie', jwtInValid)
+        .then((result) => {
+          expect(result.statusCode).toBe(403)
+        })
+    })
+  })
+
   describe('delete', () => {
     it(`Should return an empty body
       When call the endpoint DELETE /items/:id`, async () => {
