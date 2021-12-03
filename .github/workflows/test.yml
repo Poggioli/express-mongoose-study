@@ -1,4 +1,4 @@
-name: CI Test Pipeline
+name: Test
 on:
   workflow_run:
     workflows: ["CI Lint Pipeline"]
