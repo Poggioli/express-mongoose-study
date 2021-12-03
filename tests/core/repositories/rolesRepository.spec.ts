@@ -34,9 +34,7 @@ describe('RolesRepository', () => {
         it(`Should throw an error
             When name is not present`, async () => {
           expect.assertions(1)
-          const role = new RoleBuilder().build()
-          // @ts-ignore
-          delete role.name
+          const role = new RoleBuilder().name(undefined).build()
           await expect(repository.insert(role).then())
             .rejects
             .toThrow('ValidationError: name: Path `name` is required.')
@@ -47,9 +45,7 @@ describe('RolesRepository', () => {
         it(`Should throw an error
             When description is not present`, async () => {
           expect.assertions(1)
-          const role = new RoleBuilder().build()
-          // @ts-ignore
-          delete role.description
+          const role = new RoleBuilder().description(undefined).build()
           await expect(repository.insert(role).then())
             .rejects
             .toThrow('ValidationError: description: Path `description` is required.')
@@ -72,9 +68,7 @@ describe('RolesRepository', () => {
         it(`Should throw an error
             When code is not present`, async () => {
           expect.assertions(1)
-          const role = new RoleBuilder().build()
-          // @ts-ignore
-          delete role.code
+          const role = new RoleBuilder().code(undefined).build()
           await expect(repository.insert(role).then())
             .rejects
             .toThrow('ValidationError: code: Path `code` is required.')
@@ -94,9 +88,7 @@ describe('RolesRepository', () => {
         it(`Should throw an error
             When access is not present`, async () => {
           expect.assertions(1)
-          const role = new RoleBuilder().build()
-          // @ts-ignore
-          delete role.access
+          const role = new RoleBuilder().access(undefined).build()
           await expect(repository.insert(role).then())
             .rejects
             .toThrow('ValidationError: access: Path `access` is required.')

@@ -2,13 +2,13 @@ import { Role } from '../../src/core/models'
 import { CodeRoles } from '../../src/core/models/rolesModel'
 
 export default class RoleBuilder {
-  private _name: string
+  private _name: string | undefined
 
-  private _description: string
+  private _description: string | undefined
 
-  private _code: CodeRoles
+  private _code: CodeRoles | undefined
 
-  private _access: number
+  private _access: number | undefined
 
   private _active: boolean
 
@@ -20,22 +20,22 @@ export default class RoleBuilder {
     this._active = true
   }
 
-  public name(name: string): RoleBuilder {
+  public name(name: string | undefined): RoleBuilder {
     this._name = name
     return this
   }
 
-  public description(description: string): RoleBuilder {
+  public description(description: string | undefined): RoleBuilder {
     this._description = description
     return this
   }
 
-  public code(code: string): RoleBuilder {
+  public code(code: string | undefined): RoleBuilder {
     this._code = code as CodeRoles
     return this
   }
 
-  public access(access: number): RoleBuilder {
+  public access(access: number | undefined): RoleBuilder {
     this._access = access
     return this
   }
