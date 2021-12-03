@@ -13,6 +13,6 @@ sonarqubeScanner({
     'sonar.coverage.exclusions': 'src/application.ts,src/environment.ts,src/index.ts,src/core/infra/logger/logger.ts',
     'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
     'sonar.testExecutionReportPaths': 'coverage/cobertura-coverage.xml',
-    'sonar.login': '8cd537cc6bd442814d216201e7d1c63592548195'
+    'sonar.login': 'a37fd771a64660d152123a4f7e8b517c2deee564'
   }
 }, () => {})

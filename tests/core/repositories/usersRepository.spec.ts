@@ -20,7 +20,7 @@ describe('UsersRepository', () => {
 
   afterAll(async () => { await db.disconnect() })
 
-  describe('Insert method', () => {
+  describe('insert', () => {
     it(`Should return an ObjectId
         When call insert
         With the right values`, async () => {
@@ -104,7 +104,7 @@ describe('UsersRepository', () => {
     })
   })
 
-  describe('FindByEmail methor', () => {
+  describe('findByEmail', () => {
     it(`Should return an User
         When call FindByEmail
         With a right email`, async () => {
@@ -121,72 +121,9 @@ describe('UsersRepository', () => {
     })
   })
 
-  describe('FindById method', () => {
-    it(`Should return an User
-        When call findById
-        With name, active and email saved before`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      const id = await repository.insert(user as User)
-      const result: User = await repository.findById(id) as User
-      expect(result.name).toBe('name')
-      expect(result.password).toBeUndefined()
-      expect(result.email).toBe('test@email.com')
-      expect(result.active).toBe(true)
-      expect(result.createdAt).toBeInstanceOf(Date)
-      expect(result.updatedAt).toBeInstanceOf(Date)
-    })
-
-    it(`Should return null
-        When call findById
-        With to a deleted User before`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      const id = await repository.insert(user as User)
-      expect(await repository.findById(id)).not.toBeNull()
-      await repository.delete(id)
-      expect(await repository.findById(id)).toBeNull()
-    })
-
-    it(`Should return null
-        When call findById
-        With an invalid ObjectId`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      await repository.insert(user as User)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: User | null = await repository.findById(id)
-      expect(result).toBeNull()
-    })
-  })
-
-  describe('Update method', () => {
-    it(`Should return the User
-        When update works`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      const id = await repository.insert(user as User)
-      user.name = 'name 12345'
-      const oldItem: User = await repository.findById(id) as User
-      const result: User = await repository.update(id, user as User) as User
-      expect(result.name).toBe('name 12345')
-      expect(result.email).toBe('test@email.com')
-      expect((result.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
-    })
-
-    it('Should hashPassword when password change', async () => {
+  describe('update', () => {
+    it(`Should hashPassword
+        When password change`, async () => {
       const user: Partial<User> = {
         name: 'name',
         password: 'password',
@@ -198,10 +135,10 @@ describe('UsersRepository', () => {
       await repository.update(id, user as User) as User
       const newItem: User = await UserModel.findOne({ _id: id }, '+password') as User
       expect(bcrypt.compareSync('password', newItem.password)).toBe(false)
-      expect((newItem.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
     })
 
-    it('Not should hashPassword when password change', async () => {
+    it(`Not should hashPassword 
+        When password not change`, async () => {
       const user: Partial<User> = {
         name: 'name',
         password: 'password',
@@ -214,71 +151,10 @@ describe('UsersRepository', () => {
       await repository.update(id, user as User) as User
       const newItem: User = await UserModel.findOne({ _id: id }, '+password') as User
       expect(bcrypt.compareSync('password', newItem.password)).toBe(true)
-      expect((newItem.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
-    })
-
-    it(`Should return null
-        When update not found a document to update`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      await repository.insert(user as User)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: User | null = await repository.update(id, user as User)
-      expect(result).toBeNull()
-    })
-
-    describe('Validation Errors', () => {
-      it(`Should run the validations
-          When update is called`, async () => {
-        const user: Partial<User> = {
-          name: 'name',
-          password: 'password',
-          email: 'test@email.com'
-        }
-        const id = await repository.insert(user as User)
-        user.name = 'b'
-        await expect(repository.update(id, user as User)).rejects
-          .toThrow('ValidationError: name: Path `name` (`b`) is shorter than the minimum allowed length (3).')
-      })
     })
   })
 
-  describe('Delete method', () => {
-    it(`Should return the User
-        When delete works`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      const id = await repository.insert(user as User)
-      const insertedItem: User = await repository.findById(id) as User
-      expect(insertedItem.active).toBe(true)
-      const deletedItem: User = await repository.delete(id) as User
-      expect(deletedItem.name).toBe(user.name)
-      expect(deletedItem.email).toBe(user.email)
-      expect((deletedItem.updatedAt as Date).getTime() > (insertedItem.updatedAt as Date).getTime()).toBe(true)
-      expect(deletedItem.active).toBe(false)
-    })
-
-    it(`Should return null
-        When delete not found a document to delete`, async () => {
-      const user: Partial<User> = {
-        name: 'name',
-        password: 'password',
-        email: 'test@email.com'
-      }
-      await repository.insert(user as User)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: User | null = await repository.delete(id)
-      expect(result).toBeNull()
-    })
-  })
-
-  describe('Authenticate method', () => {
+  describe('authenticate', () => {
     it(`Should return true
         When find email and password match`, async () => {
       const user: Partial<User> = {

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import db from '../../testsUtils/db'
 import { ItemsRepository } from '../../../src/core/repositories'
-import { Item } from '../../../src/core/models'
 
 describe('ItemsRepository', () => {
   let repository: ItemsRepository
@@ -19,31 +18,7 @@ describe('ItemsRepository', () => {
 
   afterAll(async () => { await db.disconnect() })
 
-  describe('FindAll method', () => {
-    it(`Should return an Item[]
-        When call findAll`, async () => {
-      const result = await repository.findAll()
-      expect(result).toStrictEqual([])
-    })
-
-    it('Should return only Items active', async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      const idOne = await repository.insert(item)
-      const idTwo = await repository.insert(item)
-      const idThree = await repository.insert(item)
-      expect((await repository.findAll()).length).toBe(3)
-      await repository.delete(idTwo)
-      const result = await repository.findAll()
-      expect(result.length).toBe(2)
-      expect(result.map((r) => r._id)).toStrictEqual([idOne, idThree])
-    })
-  })
-
-  describe('Insert method', () => {
+  describe('insert', () => {
     it(`Should return an ObjectId
         When call insert
         With the right values`, async () => {
@@ -112,133 +87,6 @@ describe('ItemsRepository', () => {
           // eslint-disable-next-line max-len
           .toThrow(`ValidationError: description: Path \`description\` (\`${description}\`) is longer than the maximum allowed length (300).`)
       })
-    })
-  })
-
-  describe('FindById method', () => {
-    it(`Should return an Item
-        When call findById
-        With description, name and price saved before`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      const id = await repository.insert(item)
-      const result: Item = await repository.findById(id) as Item
-      expect(result.description).toBe('description')
-      expect(result.name).toBe('name')
-      expect(result.price).toBe(1)
-      expect(result.createdAt).toBeInstanceOf(Date)
-      expect(result.updatedAt).toBeInstanceOf(Date)
-    })
-
-    it(`Should return null
-        When call findById
-        With to a deleted Item before`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      const id = await repository.insert(item)
-      expect(await repository.findById(id)).not.toBeNull()
-      await repository.delete(id)
-      expect(await repository.findById(id)).toBeNull()
-    })
-
-    it(`Should return null
-        When call findById
-        With an invalid ObjectId`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      await repository.insert(item)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: Item | null = await repository.findById(id)
-      expect(result).toBeNull()
-    })
-  })
-
-  describe('Update method', () => {
-    it(`Should return the Item
-        When update works`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      const id = await repository.insert(item)
-      item.name = 'name 12345'
-      const oldItem: Item = await repository.findById(id) as Item
-      const result: Item = await repository.update(id, item) as Item
-      expect(result.name).toBe('name 12345')
-      expect(result.price).toBe(1)
-      expect(result.description).toBe('description')
-      expect((result.updatedAt as Date).getTime() > (oldItem.updatedAt as Date).getTime()).toBe(true)
-    })
-
-    it(`Should return null
-        When update not found a document to update`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      await repository.insert(item)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: Item | null = await repository.update(id, item)
-      expect(result).toBeNull()
-    })
-
-    describe('Validation Errors', () => {
-      it(`Should run the validations
-        When update is called`, async () => {
-        const item: any = {
-          name: 'name',
-          price: 1,
-          description: 'description'
-        }
-        const id = await repository.insert(item)
-        item.price = 0.5
-        await expect(repository.update(id, item)).rejects
-          .toThrow('ValidationError: price: Path `price` (0.5) is less than minimum allowed value (1).')
-      })
-    })
-  })
-
-  describe('Delete method', () => {
-    it(`Should return the Item
-        When delete works`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      const id = await repository.insert(item)
-      const insertedItem: Item = await repository.findById(id) as Item
-      expect(insertedItem.active).toBe(true)
-      const deletedItem: Item = await repository.delete(id) as Item
-      expect(deletedItem.name).toBe(item.name)
-      expect(deletedItem.price).toBe(item.price)
-      expect(deletedItem.description).toBe(item.description)
-      expect((deletedItem.updatedAt as Date).getTime() > (insertedItem.updatedAt as Date).getTime()).toBe(true)
-      expect(deletedItem.active).toBe(false)
-    })
-
-    it(`Should return null
-        When delete not found a document to delete`, async () => {
-      const item: any = {
-        name: 'name',
-        price: 1,
-        description: 'description'
-      }
-      await repository.insert(item)
-      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
-      const result: Item | null = await repository.delete(id)
-      expect(result).toBeNull()
     })
   })
 })
