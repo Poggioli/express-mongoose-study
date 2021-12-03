@@ -14,7 +14,7 @@
     "start:dev": "export NODE_ENV=dev && nodemon",
     "test": "export NODE_ENV=test && npm run clear-test && TZ=UTC jest --runInBand --coverage --no-cache --forceExit --silent --detectOpenHandles",
     "test:no-silent": "export NODE_ENV=test && npm run clear-test && TZ=UTC jest --runInBand --coverage --no-cache --forceExit --detectOpenHandles",
-    "coveralls": "npm run test && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run test && coveralls < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
