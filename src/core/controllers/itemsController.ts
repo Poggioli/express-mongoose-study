@@ -2,52 +2,22 @@ import { ItemsService } from '@services'
 import { jwtValidator } from '@src/core/auth'
 import { ItemModel } from '@src/core/models'
 import { Router } from 'express'
+import Controller from './controller'
 
-export default class ItemsController {
-  public static create(router: Router): void {
-    const service: ItemsService = new ItemsService()
-    this.findAll(router, service)
-    this.insert(router, service)
-    this.findById(router, service)
-    this.delete(router, service)
-    this.update(router, service)
+export default class ItemsController extends Controller {
+  constructor(router: Router) {
+    super(router, new ItemsService(), ItemModel)
   }
 
-  private static findAll(router: Router, service: ItemsService): void {
-    const url: string = '/'.concat(ItemModel.collection.name)
-    router.get(url, [
-      service.findAll()
-    ])
+  protected insertHandlers(): any[] {
+    return [jwtValidator()]
   }
 
-  private static insert(router: Router, service: ItemsService): void {
-    const url: string = '/'.concat(ItemModel.collection.name)
-    router.post(url, [
-      jwtValidator(),
-      service.insert()
-    ])
+  protected deleteHandlers(): any[] {
+    return [jwtValidator()]
   }
 
-  private static findById(router: Router, service: ItemsService): void {
-    const url: string = '/'.concat(ItemModel.collection.name, '/:id')
-    router.get(url, [
-      service.findById()
-    ])
-  }
-
-  private static delete(router: Router, service: ItemsService): void {
-    const url: string = '/'.concat(ItemModel.collection.name, '/:id')
-    router.delete(url, [
-      jwtValidator(),
-      service.delete()
-    ])
-  }
-
-  private static update(router: Router, service: ItemsService): void {
-    const url: string = '/'.concat(ItemModel.collection.name, '/:id')
-    router.put(url, [
-      jwtValidator(),
-      service.update()
-    ])
+  protected updateHandlers(): any[] {
+    return [jwtValidator()]
   }
 }

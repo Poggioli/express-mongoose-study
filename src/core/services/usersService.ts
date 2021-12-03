@@ -18,6 +18,7 @@ export default class UsersService extends Service<User, UsersRepository> {
     return async (req: Request, resp: Response): Promise<void> => {
       try {
         const { email } = req.query
+        console.log(email)
         if (!email) {
           throw new BadRequestError('Email is required')
         }

@@ -1,9 +1,11 @@
-import { ItemsController, UsersController } from '@src/core/controllers'
+/* eslint-disable no-new */
+import { ItemsController, RolesController, UsersController } from '@src/core/controllers'
 import { Router } from 'express'
 
 const router = Router()
 
-ItemsController.create(router)
-UsersController.create(router)
+new ItemsController(router)
+new RolesController(router)
+new UsersController(router)
 
 export default router

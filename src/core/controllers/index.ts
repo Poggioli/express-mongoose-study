@@ -1,4 +1,5 @@
 import ItemsController from './itemsController'
+import RolesController from './rolesController'
 import UsersController from './usersController'
 
-export { ItemsController, UsersController }
+export { ItemsController, UsersController, RolesController }
