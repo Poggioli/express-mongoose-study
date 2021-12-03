@@ -7,7 +7,7 @@ export default class ItemBuilder {
 
   private _price: number | undefined
 
-  private _active: boolean
+  private _active: boolean | undefined
 
   constructor() {
     this._name = 'name'
@@ -31,7 +31,7 @@ export default class ItemBuilder {
     return this
   }
 
-  public active(active: boolean): ItemBuilder {
+  public active(active: boolean | undefined): ItemBuilder {
     this._active = active
     return this
   }

@@ -7,7 +7,7 @@ export default class UserBuilder {
 
   private _password: string | undefined
 
-  private _active: boolean
+  private _active: boolean | undefined
 
   constructor() {
     this._name = 'name'
@@ -31,7 +31,7 @@ export default class UserBuilder {
     return this
   }
 
-  public active(active: boolean): UserBuilder {
+  public active(active: boolean | undefined): UserBuilder {
     this._active = active
     return this
   }
