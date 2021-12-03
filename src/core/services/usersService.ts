@@ -18,17 +18,8 @@ export default class UsersService extends Service<User, UsersRepository> {
     return async (req: Request, resp: Response): Promise<void> => {
       try {
         const { email } = req.query
-        if (!email) {
-          const data: User[] = await this._repository.findAll().then((items: User[]) => items).catch((err) => { throw err })
-          resp.status(StatusCodes.OK).json(data)
-          return
-        }
-
-        const data: User | null = await this._repository.findByEmail(email as string).catch((err) => { throw err })
-        if (!data) {
-          throw new NotFoundError('Email not found')
-        }
-        resp.status(StatusCodes.OK).json(data)
+        const { status, data } = !email ? await this.findMany() : await this.findByEmail(email as string)
+        resp.status(status).json(data)
       } catch (err: any) {
         handleError(resp, err)
       }
@@ -73,5 +64,25 @@ export default class UsersService extends Service<User, UsersRepository> {
       email: value.email,
       password: value.password
     })
+  }
+
+  private async findMany(): Promise<{ status: number, data: User[] }> {
+    return this._repository
+      .findAll()
+      .then((items: User[]) => ({ status: StatusCodes.OK, data: items }))
+      .catch((err) => { throw err })
+  }
+
+  private async findByEmail(email: string): Promise<{ status: number, data: User | null }> {
+    return this._repository
+      .findByEmail(email)
+      .then((item: User | null) => {
+        if (!item) {
+          throw new NotFoundError('Email not found')
+        }
+        return item
+      })
+      .then((item: User) => ({ status: StatusCodes.OK, data: item }))
+      .catch((err) => { throw err })
   }
 }
