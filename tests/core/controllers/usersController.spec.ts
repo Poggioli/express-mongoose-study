@@ -40,7 +40,6 @@ describe('ItemsController', () => {
     await request(server)
       .get('/v1/users/email?'.concat(queryParams.toString()))
       .then((result) => {
-        console.log(result.body)
         expect(result.statusCode).toBe(StatusCodes.OK)
         expect(result.body.email).toBe('teste@email.com')
       })
