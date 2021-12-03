@@ -30,7 +30,7 @@ describe('UsersService', () => {
     service._repository = repository
   })
 
-  describe('findByEmail', () => {
+  describe('findAll', () => {
     it(`Should return a status code 200
         When email exists`, async () => {
       expect.assertions(4)
@@ -41,7 +41,7 @@ describe('UsersService', () => {
         }
       }
       jest.spyOn(repository, 'findByEmail').mockResolvedValueOnce(user)
-      const call = await service.findByEmail()
+      const call = await service.findAll()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
@@ -58,7 +58,7 @@ describe('UsersService', () => {
         }
       }
       jest.spyOn(repository, 'findByEmail').mockResolvedValueOnce(null)
-      const call = await service.findByEmail()
+      const call = await service.findAll()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)
@@ -66,19 +66,40 @@ describe('UsersService', () => {
       expect(spyResponseJson).toHaveBeenCalledWith('Email not found')
     })
 
-    it(`Should return a status code 400
+    it(`Should return a status code 200
+        And an array
         When email isn't provided`, async () => {
-      expect.assertions(4)
+      expect.assertions(5)
       request = {
         query: {}
       }
-      jest.spyOn(repository, 'findByEmail').mockResolvedValueOnce(null)
-      const call = await service.findByEmail()
+      jest.spyOn(repository, 'findByEmail')
+      jest.spyOn(repository, 'findAll').mockResolvedValueOnce([])
+      const call = await service.findAll()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
-      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
-      expect(spyResponseJson).toHaveBeenCalledWith('Email is required')
+      expect(spyResponseJson).toHaveBeenCalledWith([])
+      expect(repository.findByEmail).not.toHaveBeenCalled()
+    })
+
+    it(`Should return an error message
+        And status code 500
+        When call findById`, async () => {
+      expect.assertions(5)
+      jest.spyOn(repository, 'findAll').mockRejectedValueOnce({ message: 'Error message' })
+      request = {
+        query: {}
+      }
+      jest.spyOn(repository, 'findByEmail')
+      const call = await service.findAll()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('Error message')
+      expect(repository.findByEmail).not.toHaveBeenCalled()
     })
 
     it(`Should return an error message
@@ -86,13 +107,12 @@ describe('UsersService', () => {
         When call findById`, async () => {
       expect.assertions(4)
       jest.spyOn(repository, 'findByEmail').mockRejectedValueOnce({ message: 'Error message' })
-      const id = new mongoose.Types.ObjectId()
       request = {
         query: {
           email: 'email@test.com'
         }
       }
-      const call = await service.findByEmail()
+      const call = await service.findAll()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)

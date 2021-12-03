@@ -25,7 +25,7 @@ describe('ItemsController', () => {
     server.close()
   })
 
-  xit(`Should return a statusCode 200
+  it(`Should return a statusCode 200
       When call the endpoint GET /users/email?email=teste@email.com`, async () => {
     expect.assertions(2)
     const user: User = new UserBuilder().build()
@@ -38,10 +38,10 @@ describe('ItemsController', () => {
       .send(user)
 
     await request(server)
-      .get('/v1/users/email?'.concat(queryParams.toString()))
+      .get('/v1/users?'.concat(queryParams.toString()))
       .then((result) => {
         expect(result.statusCode).toBe(StatusCodes.OK)
-        expect(result.body.email).toBe('teste@email.com')
+        expect(result.body.email).toBe(user.email)
       })
   })
 

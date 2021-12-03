@@ -1,5 +1,5 @@
 import { Jwt } from '@src/core/auth'
-import { BadRequestError, NotFoundError } from '@src/core/customErrors'
+import { NotFoundError } from '@src/core/customErrors'
 import ForbiddenError from '@src/core/customErrors/forbiddenError'
 import handleError from '@src/core/handlers'
 import { User } from '@src/core/models'
@@ -14,13 +14,16 @@ export default class UsersService extends Service<User, UsersRepository> {
     super(new UsersRepository())
   }
 
-  public findByEmail(): (req: Request, resp: Response) => Promise<void> {
+  public findAll(): (req: Request, resp: Response) => Promise<void> {
     return async (req: Request, resp: Response): Promise<void> => {
       try {
         const { email } = req.query
         if (!email) {
-          throw new BadRequestError('Email is required')
+          const data: User[] = await this._repository.findAll().then((items: User[]) => items).catch((err) => { throw err })
+          resp.status(StatusCodes.OK).json(data)
+          return
         }
+
         const data: User | null = await this._repository.findByEmail(email as string).catch((err) => { throw err })
         if (!data) {
           throw new NotFoundError('Email not found')
