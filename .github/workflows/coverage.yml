@@ -1,7 +1,7 @@
-name: Test
+name: Coverage
 on:
   workflow_run:
-    workflows: ["Lint"]
+    workflows: ["Build"]
     types:
       - completed
   push:
@@ -21,4 +21,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm i
-      - run: npm run test
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run coveralls

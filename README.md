@@ -5,6 +5,7 @@
 ![Build](https://github.com/Poggioli/express-mongoose-study/actions/workflows/build.yml/badge.svg)
 ![Lint](https://github.com/Poggioli/express-mongoose-study/actions/workflows/lint.yml/badge.svg)
 ![Test](https://github.com/Poggioli/express-mongoose-study/actions/workflows/test.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/Poggioli/express-mongoose-study/badge.svg?branch=main)](https://coveralls.io/github/Poggioli/express-mongoose-study?branch=main)
 
 ## About the project
 
