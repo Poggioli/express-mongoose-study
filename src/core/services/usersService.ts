@@ -43,13 +43,15 @@ export default class UsersService extends Service<User, UsersRepository> {
     if (isUpdate) {
       return ({
         name: value.name,
-        email: value.email
+        email: value.email,
+        roles: value.roles
       })
     }
     return ({
       name: value.name,
       email: value.email,
-      password: value.password
+      password: value.password,
+      roles: value.roles
     })
   }
 }

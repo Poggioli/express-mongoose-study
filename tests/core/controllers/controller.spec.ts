@@ -103,10 +103,6 @@ describe('Controller', () => {
     })).listening()
   })
 
-  beforeEach(async () => {
-    await db.createDefaultUser()
-  })
-
   afterEach(async () => { await db.clear() })
 
   afterAll(async () => {

@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { advanceTo, clear } from 'jest-date-mock'
 import request from 'supertest'
 import Application from '../../../src/application'
+import Jwt from '../../../src/core/auth/jwt'
 import { User } from '../../../src/core/models'
 import db from '../../testsUtils/db'
 import UserBuilder from '../../testsUtils/user'
@@ -43,6 +44,12 @@ describe('ItemsController', () => {
     advanceTo(new Date(2021, 8, 8, 0, 0, 0, 0))
     const user: User = new UserBuilder().build()
 
+    const jwt: string = new Jwt().createJwt({
+      name: user.name,
+      email: user.email,
+      roles: []
+    })
+
     await request(server)
       .post('/v1/users')
       .send(user)
@@ -54,7 +61,7 @@ describe('ItemsController', () => {
         expect(result.statusCode).toBe(StatusCodes.NO_CONTENT)
         const expectedsCookies: string[] = [
           // eslint-disable-next-line max-len
-          'jwtToken=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoiZW1haWxAdGVzdC5jb20iLCJleHAiOjE2MzExNDU2MDB9.f3wiiG7Vd0pgXxi4d2Lqf0Q-QSGKJRq-XW9ZIrR_bss',
+          'jwtToken=Bearer%20'.concat(jwt),
           'Path=/',
           'HttpOnly'
         ]

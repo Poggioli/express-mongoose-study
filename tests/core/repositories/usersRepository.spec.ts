@@ -77,6 +77,22 @@ describe('UsersRepository', () => {
           // eslint-disable-next-line max-len
           .toThrow('MongoServerError: E11000 duplicate key error collection: test.users index: email_1 dup key: { email: "email@test.com" }')
       })
+
+      it(`Should return an Error
+          When call insert
+          Without roles`, async () => {
+        const user: User = new UserBuilder().roles(undefined).build()
+        // eslint-disable-next-line max-len
+        await expect(repository.insert(user)).rejects.toThrow('ValidationError: roles: roles is shorter than the minimum allowed length (1).')
+      })
+
+      it(`Should return an Error
+          When call insert
+          With empty array of roles`, async () => {
+        const user: User = new UserBuilder().roles([]).build()
+        await expect(repository.insert(user)).rejects
+          .toThrow('ValidationError: roles: roles is shorter than the minimum allowed length (1).')
+      })
     })
   })
 

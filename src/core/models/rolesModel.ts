@@ -27,7 +27,7 @@ export interface Role extends Document {
   updatedAt?: Date
 }
 
-const roleSchema = new Schema<Role>({
+export const roleSchema = new Schema<Role>({
   name: {
     type: String,
     required: true,

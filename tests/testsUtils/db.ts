@@ -35,7 +35,9 @@ class MongoD {
   }
 
   public async createDefaultUser(): Promise<void> {
-    const document = new UserModel({ name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd' })
+    const document = new UserModel({
+      name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd', roles: [new mongoose.Types.ObjectId()]
+    })
     await document.save().then()
   }
 }

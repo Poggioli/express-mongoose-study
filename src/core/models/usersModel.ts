@@ -4,11 +4,13 @@ import { NextFunction } from 'express'
 import mongoose, { Document, Model, Schema } from 'mongoose'
 import * as bcrypt from 'bcrypt'
 import environment from '@src/environment'
+import { Role } from './rolesModel'
 
 export interface User extends Document {
   name: string,
   email: string,
   password: string,
+  roles: mongoose.Types.ObjectId[] | Role[]
   active?: boolean,
   createdAt?: Date,
   updatedAt?: Date
@@ -41,13 +43,20 @@ const userSchema = new Schema<User>({
     type: String,
     required: true,
     select: false
+  },
+  roles: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Role'
+    }],
+    validate: [(v: any[]) => Array.isArray(v) && v.length > 0, '{PATH} is shorter than the minimum allowed length (1).']
   }
 }, {
   timestamps: true
 })
 
 userSchema.statics.findByEmail = function (email: string, projection?: string) {
-  return this.findOne({ email }, projection)
+  return this.findOne({ email }, projection).populate('roles', 'code access')
 }
 
 userSchema.methods.matches = function (password: string): boolean {

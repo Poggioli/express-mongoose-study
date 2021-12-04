@@ -5,6 +5,7 @@ import { User } from '../../../src/core/models'
 import { UsersRepository } from '../../../src/core/repositories'
 import { UsersService } from '../../../src/core/services'
 import UserBuilder from '../../testsUtils/user'
+import Jwt from '../../../src/core/auth/jwt'
 
 const service = Object.getPrototypeOf(new UsersService())
 describe('UsersService', () => {
@@ -44,7 +45,8 @@ describe('UsersService', () => {
       const userSended = {
         name: user.name,
         email: user.email,
-        password: user.password
+        password: user.password,
+        roles: user.roles
       }
 
       jest.spyOn(repository, 'insert').mockResolvedValueOnce(id)
@@ -75,7 +77,8 @@ describe('UsersService', () => {
 
       const userSended = {
         name: user.name,
-        email: user.email
+        email: user.email,
+        roles: user.roles
       }
 
       jest.spyOn(repository, 'update').mockResolvedValueOnce(user)
@@ -96,10 +99,14 @@ describe('UsersService', () => {
       jest
         .useFakeTimers()
         .setSystemTime(new Date(2021, 8, 8, 0, 0, 0, 0).getTime())
-      // eslint-disable-next-line max-len
-      const jwtToken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoibmFtZSIsImVtYWlsIjoiZW1haWxAdGVzdC5jb20iLCJleHAiOjE2MzExNDU2MDB9.f3wiiG7Vd0pgXxi4d2Lqf0Q-QSGKJRq-XW9ZIrR_bss'
       jest.spyOn(response, 'cookie')
       const user: User = new UserBuilder().active(undefined).build()
+
+      const jwt: string = new Jwt().createJwt({
+        name: user.name,
+        email: user.email,
+        roles: user.roles
+      })
 
       request = {
         body: user
@@ -114,7 +121,7 @@ describe('UsersService', () => {
       expect(response.cookie).toHaveBeenCalledTimes(1)
       expect(response.cookie).toHaveBeenCalledWith(
         'jwtToken',
-        jwtToken,
+        'Bearer '.concat(jwt),
         {
           path: '/',
           secure: false,

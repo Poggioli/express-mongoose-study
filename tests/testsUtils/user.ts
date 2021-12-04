@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { User } from '../../src/core/models'
 
 export default class UserBuilder {
@@ -9,11 +10,15 @@ export default class UserBuilder {
 
   private _active: boolean | undefined
 
+  private _roles: mongoose.Types.ObjectId[] | undefined
+
   constructor() {
     this._name = 'name'
     this._email = 'email@test.com'
     this._password = 'password'
     this._active = true
+    const roleId = new mongoose.Types.ObjectId()
+    this._roles = [roleId]
   }
 
   public name(name: string | undefined): UserBuilder {
@@ -36,12 +41,18 @@ export default class UserBuilder {
     return this
   }
 
+  public roles(roles: mongoose.Types.ObjectId[] | undefined): UserBuilder {
+    this._roles = roles
+    return this
+  }
+
   public build(): User {
     return {
       name: this._name,
       email: this._email,
       password: this._password,
-      active: this._active
+      active: this._active,
+      roles: this._roles
     } as User
   }
 }
