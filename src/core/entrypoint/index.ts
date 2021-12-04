@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import { ItemsController, RolesController, UsersController } from '@src/core/controllers'
+import { ItemsController, RolesController, UsersController } from '@controllers'
 import { Router } from 'express'
 
 const router = Router()

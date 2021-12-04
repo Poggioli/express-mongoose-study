@@ -1,5 +1,5 @@
 import { RolesRepository } from '@repositories'
-import { Role } from '@src/core/models'
+import { Role } from '@models'
 import Service from './service'
 
 export default class RolesService extends Service<Role, RolesRepository> {

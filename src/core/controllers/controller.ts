@@ -1,4 +1,4 @@
-import Service from '@src/core/services/service'
+import { Service } from '@services'
 import { Router } from 'express'
 import { Model } from 'mongoose'
 

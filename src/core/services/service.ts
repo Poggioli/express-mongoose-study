@@ -1,6 +1,6 @@
 import { NotFoundError, UnprocessableEntityError } from '@src/core/customErrors'
-import handleError from '@src/core/handlers'
-import { Repository } from '@src/core/repositories'
+import { handleError } from '@handlers'
+import { Repository } from '@repositories'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose, { Document } from 'mongoose'

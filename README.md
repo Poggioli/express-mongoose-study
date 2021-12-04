@@ -34,16 +34,24 @@ Endpoints `/v1`:
 
 - GET `/items`
 - GET `/items/:id`
-- DELETE `items/:id`
 - POST `/items`
+- PUT `/items/:id`
+- DELETE `items/:id`
 
 #### Users
 
-- POST `/users`
-- GET `/users/email?email=`
 - GET `/users/:id`
-- DELETE `/users/:id`
+- POST `/users`
 - POST `/users/authenticate`
+- DELETE `/users/:id`
+
+#### Roles
+
+- GET `/roles`
+- GET `/roles/:id`
+- POST `/roles`
+- PUT `/roles/:id`
+- DELETE `/roles/:id`
 
 ### Docker image
 

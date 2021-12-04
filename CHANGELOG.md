@@ -21,5 +21,13 @@
   - PUT /items/:id
   - DELETE /items/:id
 - create new errors
-- authentication endpoint:
-  - POST /users/authenticate
+- roles endpoint
+  - POST /roles
+  - PUT /roles/:id
+  - GET /roles/:id
+  - GET /roles
+  - DELETE /roles/:id
+
+## Removed
+
+- endpoint GET - /users/email

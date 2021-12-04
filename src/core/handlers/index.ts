@@ -1,3 +1,4 @@
 import handleError from './handleError'
+import handleDisableEndpoint from './handleDisableEndpoint'
 
-export default handleError
+export { handleError, handleDisableEndpoint }

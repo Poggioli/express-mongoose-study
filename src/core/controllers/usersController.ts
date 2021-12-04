@@ -1,5 +1,5 @@
-import { UserModel } from '@src/core/models'
-import { UsersService } from '@src/core/services'
+import { UserModel } from '@models'
+import { UsersService } from '@services'
 import { Router } from 'express'
 import Controller from './controller'
 

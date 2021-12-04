@@ -1,6 +1,6 @@
 import { ItemsService } from '@services'
 import { jwtValidator } from '@src/core/auth'
-import { ItemModel } from '@src/core/models'
+import { ItemModel } from '@models'
 import { Router } from 'express'
 import Controller from './controller'
 

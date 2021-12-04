@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import handleError from '../../../src/core/handlers'
+import { handleError } from '../../../src/core/handlers'
 import { NotFoundError } from '../../../src/core/customErrors'
 
 describe('handleError', () => {

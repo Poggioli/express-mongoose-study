@@ -1,4 +1,4 @@
-import { User, UserModel } from '@src/core/models'
+import { User, UserModel } from '@models'
 import Repository from './repository'
 
 export default class UsersRepository extends Repository<User> {

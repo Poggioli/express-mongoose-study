@@ -1,8 +1,8 @@
 import { RolesService } from '@services'
 import { jwtValidator } from '@src/core/auth'
-import Controller from '@src/core/controllers/controller'
-import { RoleModel } from '@src/core/models'
+import { RoleModel } from '@models'
 import { Router } from 'express'
+import Controller from './controller'
 
 export default class RolesController extends Controller {
   constructor(router: Router) {
