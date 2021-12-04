@@ -1,5 +1,4 @@
 import { Jwt } from '@src/core/auth'
-import { NotFoundError } from '@src/core/customErrors'
 import ForbiddenError from '@src/core/customErrors/forbiddenError'
 import handleError from '@src/core/handlers'
 import { User } from '@src/core/models'
@@ -12,18 +11,6 @@ import Service from './service'
 export default class UsersService extends Service<User, UsersRepository> {
   constructor() {
     super(new UsersRepository())
-  }
-
-  public findAll(): (req: Request, resp: Response) => Promise<void> {
-    return async (req: Request, resp: Response): Promise<void> => {
-      try {
-        const { email } = req.query
-        const { status, data } = !email ? await this.findMany() : await this.findByEmail(email as string)
-        resp.status(status).json(data)
-      } catch (err: any) {
-        handleError(resp, err)
-      }
-    }
   }
 
   public authenticate(): (req: Request, resp: Response) => Promise<void> {
@@ -64,25 +51,5 @@ export default class UsersService extends Service<User, UsersRepository> {
       email: value.email,
       password: value.password
     })
-  }
-
-  private async findMany(): Promise<{ status: number, data: User[] }> {
-    return this._repository
-      .findAll()
-      .then((items: User[]) => ({ status: StatusCodes.OK, data: items }))
-      .catch((err) => { throw err })
-  }
-
-  private async findByEmail(email: string): Promise<{ status: number, data: User | null }> {
-    return this._repository
-      .findByEmail(email)
-      .then((item: User | null) => {
-        if (!item) {
-          throw new NotFoundError('Email not found')
-        }
-        return item
-      })
-      .then((item: User) => ({ status: StatusCodes.OK, data: item }))
-      .catch((err) => { throw err })
   }
 }

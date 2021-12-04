@@ -6,8 +6,6 @@ export default class UsersRepository extends Repository<User> {
     super(UserModel)
   }
 
-  public findByEmail = async (value: string, projection?: string): Promise<User | null> => UserModel.findByEmail(value, projection).then()
-
   public authenticate = async (value: User): Promise<User | null> => {
     const { email, password } = value
     return UserModel.findByEmail(email, '+password')

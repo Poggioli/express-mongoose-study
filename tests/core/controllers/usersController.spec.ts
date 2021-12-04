@@ -25,26 +25,6 @@ describe('ItemsController', () => {
     server.close()
   })
 
-  it(`Should return a statusCode 200
-      When call the endpoint GET /users/email?email=teste@email.com`, async () => {
-    expect.assertions(2)
-    const user: User = new UserBuilder().build()
-    const queryParams: URLSearchParams = new URLSearchParams({
-      email: user.email
-    })
-
-    await request(server)
-      .post('/v1/users')
-      .send(user)
-
-    await request(server)
-      .get('/v1/users?'.concat(queryParams.toString()))
-      .then((result) => {
-        expect(result.statusCode).toBe(StatusCodes.OK)
-        expect(result.body.email).toBe(user.email)
-      })
-  })
-
   it(`Should return a statusCode 204
       And jwtToken in cookie
       When call the endpoint POST /users/authenticate`, async () => {

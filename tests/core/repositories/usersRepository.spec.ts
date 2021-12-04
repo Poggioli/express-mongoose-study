@@ -80,19 +80,6 @@ describe('UsersRepository', () => {
     })
   })
 
-  describe('findByEmail', () => {
-    it(`Should return an User
-        When call FindByEmail
-        With a right email`, async () => {
-      const user: User = new UserBuilder().build()
-      await repository.insert(user)
-      const result = await repository.findByEmail(user.email as string) as User
-      expect(result).toBeDefined()
-      expect(result.name).toBe('name')
-      expect(result.email).toBe('email@test.com')
-    })
-  })
-
   describe('update', () => {
     it(`Should hashPassword
         When password change`, async () => {
