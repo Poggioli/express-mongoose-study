@@ -25,9 +25,21 @@ describe('ItemsController', () => {
     server.close()
   })
 
+  it(`Should return statusCode 404
+      When call the endpoint GET /users`, async () => {
+    expect.assertions(2)
+    await request(server)
+      .get('/v1/users')
+      .then((result) => {
+        expect(result.statusCode).toBe(StatusCodes.NOT_FOUND)
+        expect(result.body).toBe('Cannot GET - /users')
+      })
+  })
+
   it(`Should return a statusCode 204
       And jwtToken in cookie
       When call the endpoint POST /users/authenticate`, async () => {
+    expect.assertions(2)
     advanceTo(new Date(2021, 8, 8, 0, 0, 0, 0))
     const user: User = new UserBuilder().build()
 

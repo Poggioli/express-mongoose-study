@@ -38,11 +38,11 @@ describe('handleDisableEndpoint', () => {
     expect(spyJsonResponse).toHaveBeenCalledWith('Cannot GET - /teste')
   })
 
-  it('Should call next with false value', async () => {
+  it('Should call next with \'route\' value', async () => {
     expect.assertions(2)
     const call = handleDisableEndpoint()
     await call(request as Request, response as Response, next)
     expect(next).toHaveBeenCalledTimes(1)
-    expect(next).toHaveBeenCalledWith(false)
+    expect(next).toHaveBeenCalledWith('route')
   })
 })

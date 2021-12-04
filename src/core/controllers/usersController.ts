@@ -1,5 +1,6 @@
 import { UserModel } from '@models'
 import { UsersService } from '@services'
+import { handleDisableEndpoint } from '@src/core/handlers'
 import { Router } from 'express'
 import Controller from './controller'
 
@@ -7,6 +8,10 @@ export default class UsersController extends Controller {
   constructor(router: Router) {
     super(router, new UsersService(), UserModel)
     this.authenticate()
+  }
+
+  protected findAllHandlers(): any[] {
+    return [handleDisableEndpoint()]
   }
 
   private authenticate(): void {
