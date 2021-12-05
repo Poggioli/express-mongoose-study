@@ -1,10 +1,11 @@
+import { StatusCodes } from 'http-status-codes'
 import { NotFoundError } from '../../../src/core/customErrors'
 
 describe('NotFoundError', () => {
   it(`Should return 404
       When call statusCode`, () => {
     const notFoundError: NotFoundError = new NotFoundError()
-    expect(notFoundError.statusCode).toBe(404)
+    expect(notFoundError.statusCode).toBe(StatusCodes.NOT_FOUND)
   })
 
   it(`If not set message

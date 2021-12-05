@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
 import { jwtValidator } from '../../../src/core/auth'
-import { UnauthorizedError, ForbiddenError } from '../../../src/core/customErrors'
 import { jwtValid, jwtInvalid } from '../../testsUtils/jwt'
 
 describe('jwtValidator', () => {
@@ -28,9 +28,9 @@ describe('jwtValidator', () => {
     }
     await call(request as Request, response as Response, next)
     expect(spyStatusResponse).toHaveBeenCalledTimes(1)
-    expect(spyStatusResponse).toHaveBeenCalledWith(401)
+    expect(spyStatusResponse).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED)
     expect(spyJsonResponse).toHaveBeenCalledTimes(1)
-    expect(spyJsonResponse).toHaveBeenCalledWith(new UnauthorizedError())
+    expect(spyJsonResponse).toHaveBeenCalledWith('Unauthorized')
   })
 
   it(`Should return status code 401
@@ -45,9 +45,9 @@ describe('jwtValidator', () => {
     }
     await call(request as Request, response as Response, next)
     expect(spyStatusResponse).toHaveBeenCalledTimes(1)
-    expect(spyStatusResponse).toHaveBeenCalledWith(401)
+    expect(spyStatusResponse).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED)
     expect(spyJsonResponse).toHaveBeenCalledTimes(1)
-    expect(spyJsonResponse).toHaveBeenCalledWith(new UnauthorizedError())
+    expect(spyJsonResponse).toHaveBeenCalledWith('Unauthorized')
   })
 
   it(`Should return status code 403
@@ -61,9 +61,9 @@ describe('jwtValidator', () => {
     }
     await call(request as Request, response as Response, next)
     expect(spyStatusResponse).toHaveBeenCalledTimes(1)
-    expect(spyStatusResponse).toHaveBeenCalledWith(403)
+    expect(spyStatusResponse).toHaveBeenCalledWith(StatusCodes.FORBIDDEN)
     expect(spyJsonResponse).toHaveBeenCalledTimes(1)
-    expect(spyJsonResponse).toHaveBeenCalledWith(new ForbiddenError())
+    expect(spyJsonResponse).toHaveBeenCalledWith('Forbidden')
   })
 
   it(`Should call next

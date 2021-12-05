@@ -1,10 +1,11 @@
+import { StatusCodes } from 'http-status-codes'
 import { UnauthorizedError } from '../../../src/core/customErrors'
 
 describe('UnauthorizedError', () => {
   it(`Should return 401
       When call statusCode`, () => {
     const unauthorizedError: UnauthorizedError = new UnauthorizedError()
-    expect(unauthorizedError.statusCode).toBe(401)
+    expect(unauthorizedError.statusCode).toBe(StatusCodes.UNAUTHORIZED)
   })
 
   it(`If not set message

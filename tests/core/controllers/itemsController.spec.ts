@@ -17,10 +17,6 @@ describe('ItemsController', () => {
     server = (await app.bootstrap()).listening()
   })
 
-  beforeEach(async () => {
-    await db.createDefaultUser()
-  })
-
   afterEach(async () => { await db.clear() })
 
   afterAll(async () => {

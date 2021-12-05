@@ -1,10 +1,11 @@
+import { StatusCodes } from 'http-status-codes'
 import { UnprocessableEntityError } from '../../../src/core/customErrors'
 
 describe('UnprocessableEntityError', () => {
   it(`Should return 422
       When call statusCode`, () => {
     const unprocessableEntityError: UnprocessableEntityError = new UnprocessableEntityError()
-    expect(unprocessableEntityError.statusCode).toBe(422)
+    expect(unprocessableEntityError.statusCode).toBe(StatusCodes.UNPROCESSABLE_ENTITY)
   })
 
   it(`If not set message

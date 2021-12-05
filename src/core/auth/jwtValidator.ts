@@ -18,13 +18,13 @@ export default function jwtValidator(): (req: Request, resp: Response, next: Nex
     const { cookie } = req.headers
     const cookies: any = cookie ? cookiesToObject(cookie) : {}
     if (!Object.prototype.hasOwnProperty.call(cookies, 'jwtToken')) {
-      resp.status(StatusCodes.UNAUTHORIZED).json(new UnauthorizedError())
+      resp.status(StatusCodes.UNAUTHORIZED).json(new UnauthorizedError().message)
       return
     }
     const jwt: Jwt = new Jwt()
     const jwtToken: string = cookies.jwtToken.substring('Bearer '.length)
     if (!jwt.validate(jwtToken)) {
-      resp.status(StatusCodes.FORBIDDEN).json(new ForbiddenError())
+      resp.status(StatusCodes.FORBIDDEN).json(new ForbiddenError().message)
       return
     }
     (req as any).user = jwt.getPayload(jwtToken)
