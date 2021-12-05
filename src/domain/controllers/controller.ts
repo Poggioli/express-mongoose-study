@@ -16,11 +16,19 @@ export default class Controller {
     this._service = service
     this._model = model
     this._url = '/'.concat(this._model.collection.name)
+  }
+
+  protected createCustomRouter(): void {
+    // Need to be implemented if the router needs more endpoints
+  }
+
+  public create(): void {
     this.findAll()
     this.insert()
     this.findById()
     this.delete()
     this.update()
+    this.createCustomRouter()
   }
 
   protected findAllHandlers(): any[] {

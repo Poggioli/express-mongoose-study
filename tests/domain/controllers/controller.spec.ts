@@ -95,7 +95,8 @@ describe('Controller', () => {
     const app: Application = new Application()
     const router: Router = Router()
     // eslint-disable-next-line no-new
-    new DummyController(router)
+    const route = new DummyController(router)
+    route.create()
     server = (await app.bootstrap().then((ap) => {
       // @ts-ignore
       ap._app.use('/v1', router)

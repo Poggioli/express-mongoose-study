@@ -7,11 +7,14 @@ import Controller from './controller'
 export default class UsersController extends Controller {
   constructor(router: Router) {
     super(router, new UsersService(), UserModel)
-    this.authenticate()
   }
 
   protected findAllHandlers(): any[] {
     return [handleDisableEndpoint()]
+  }
+
+  createCustomRouter(): void {
+    this.authenticate()
   }
 
   private authenticate(): void {
