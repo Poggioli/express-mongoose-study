@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import { Role } from '../../../src/core/models'
-import { RolesRepository } from '../../../src/core/repositories'
+import { Role } from '../../../src/domain/models'
+import { RolesRepository } from '../../../src/domain/repositories'
 import db from '../../testsUtils/db'
 import RoleBuilder from '../../testsUtils/role'
 

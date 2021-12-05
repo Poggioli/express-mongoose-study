@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { User } from '../../src/core/models'
+import { User } from '../../src/domain/models'
 
 export default class UserBuilder {
   private _name: string | undefined

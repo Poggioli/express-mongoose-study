@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import mongoose, { Document, Schema } from 'mongoose'
-import { Repository } from '../../../src/core/repositories'
+import { Repository } from '../../../src/domain/repositories'
 import db from '../../testsUtils/db'
 
 interface Dummy extends Document {

@@ -13,10 +13,10 @@
     "paths": {
       "@infra/*": ["./src/core/infra/*"],
       "@src/*": ["./src/*"],
-      "@models": ["./src/core/models/index"],
-      "@repositories": ["./src/core/repositories/index"],
-      "@services": ["./src/core/services/index"],
-      "@controllers": ["./src/core/controllers/index"],
+      "@models": ["./src/domain/models/index"],
+      "@repositories": ["./src/domain/repositories/index"],
+      "@services": ["./src/domain/services/index"],
+      "@controllers": ["src/domain/controllers/index"],
       "@handlers": ["./src/core/handlers/index"],
       "@errors": ["./src/core/customErrors/index"]
     },

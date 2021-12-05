@@ -2,8 +2,8 @@
 /* eslint-disable no-restricted-syntax */
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { UserModel, RoleModel, Role } from '../../src/core/models'
-import { CodeRoles } from '../../src/core/models/rolesModel'
+import { UserModel, RoleModel, Role } from '../../src/domain/models'
+import { CodeRoles } from '../../src/domain/models/rolesModel'
 import RoleBuilder from './role'
 
 class MongoD {

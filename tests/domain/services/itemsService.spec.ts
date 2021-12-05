@@ -1,18 +1,19 @@
+/* eslint-disable dot-notation */
 import { Request, Response } from 'express'
-import { StatusCodes } from 'http-status-codes'
 import mongoose from 'mongoose'
-import { Role } from '../../../src/core/models'
-import { RolesRepository } from '../../../src/core/repositories'
-import { RolesService } from '../../../src/core/services'
-import RoleBuilder from '../../testsUtils/role'
+import { StatusCodes } from 'http-status-codes'
+import { ItemsService } from '../../../src/domain/services'
+import { ItemsRepository } from '../../../src/domain/repositories'
+import { Item } from '../../../src/domain/models'
+import ItemBuilder from '../../testsUtils/item'
 
-const service = Object.getPrototypeOf(new RolesService())
-describe('RolesService', () => {
+const service = Object.getPrototypeOf(new ItemsService())
+describe('ItemsService', () => {
   let request: Partial<Request>
   let response: Partial<Response>
   let spyResponseJson: jest.SpyInstance
   let spyResponseStatus: jest.SpyInstance
-  let repository: RolesRepository
+  let repository: ItemsRepository
 
   beforeEach(() => {
     response = {
@@ -22,28 +23,20 @@ describe('RolesService', () => {
     request = {}
     spyResponseStatus = jest.spyOn(response, 'status')
     spyResponseJson = jest.spyOn(response, 'json')
-    repository = new RolesRepository()
+    repository = new ItemsRepository()
     service._repository = repository
   })
 
   describe('insert', () => {
-    it(`Should return the ID
+    it(`Should return a ObjectId
         And status code 201
         When the body is valid`, async () => {
       expect.assertions(5)
-      const role: Role = new RoleBuilder().build()
-      const id = new mongoose.Types.ObjectId()
+      const item: Item = new ItemBuilder().active(undefined).build()
       request = {
-        body: role
+        body: item
       }
-
-      const roleSended = {
-        name: role.name,
-        description: role.description,
-        code: role.code,
-        access: role.access
-      }
-
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
       jest.spyOn(repository, 'insert').mockResolvedValueOnce(id)
       const call = await service.insert()
       await call(request as Request, response as Response)
@@ -51,40 +44,32 @@ describe('RolesService', () => {
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.CREATED)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
       expect(spyResponseJson).toHaveBeenCalledWith(id.toString())
-      expect(repository.insert).toHaveBeenCalledWith(roleSended)
+      expect(repository.insert).toHaveBeenCalledWith(item)
     })
   })
 
   describe('update', () => {
-    it(`Should return the Role who was updated
+    it(`Should return the Item Who was updated
         And status code 200
         When the body is valid
         And ID is Valid`, async () => {
       expect.assertions(5)
-      const role: Role = new RoleBuilder().build()
-      const id = new mongoose.Types.ObjectId()
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      const item = new ItemBuilder().active(undefined).build()
       request = {
         params: {
           id: id.toString()
         },
-        body: role
+        body: item
       }
-
-      const roleSended = {
-        name: role.name,
-        description: role.description,
-        code: role.code,
-        access: role.access
-      }
-
-      jest.spyOn(repository, 'update').mockResolvedValueOnce(role)
+      jest.spyOn(repository, 'update').mockResolvedValueOnce(item as Item)
       const call = await service.update()
       await call(request as Request, response as Response)
       expect(spyResponseStatus).toHaveBeenCalledTimes(1)
       expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.OK)
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
-      expect(spyResponseJson).toHaveBeenCalledWith(role)
-      expect(repository.update).toHaveBeenCalledWith(id, roleSended)
+      expect(spyResponseJson).toHaveBeenCalledWith(item)
+      expect(repository.update).toHaveBeenCalledWith(id, item)
     })
   })
 })

@@ -2,8 +2,8 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose, { Document, Schema } from 'mongoose'
-import { Repository } from '../../../src/core/repositories'
-import Service from '../../../src/core/services/service'
+import { Repository } from '../../../src/domain/repositories'
+import Service from '../../../src/domain/services/service'
 
 interface Dummy extends Document {
   name: string,

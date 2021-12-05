@@ -1,5 +1,5 @@
-import { Role } from '../../src/core/models'
-import { CodeRoles } from '../../src/core/models/rolesModel'
+import { Role } from '../../src/domain/models'
+import { CodeRoles } from '../../src/domain/models/rolesModel'
 
 export default class RoleBuilder {
   private _name: string | undefined

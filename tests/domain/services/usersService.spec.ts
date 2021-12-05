@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose from 'mongoose'
-import { User } from '../../../src/core/models'
-import { UsersRepository } from '../../../src/core/repositories'
-import { UsersService } from '../../../src/core/services'
+import { User } from '../../../src/domain/models'
+import { UsersRepository } from '../../../src/domain/repositories'
+import { UsersService } from '../../../src/domain/services'
 import UserBuilder from '../../testsUtils/user'
 import Jwt from '../../../src/core/auth/jwt'
 

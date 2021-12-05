@@ -5,9 +5,9 @@ import { StatusCodes } from 'http-status-codes'
 import mongoose, { Document, Schema } from 'mongoose'
 import request from 'supertest'
 import Application from '../../../src/application'
-import Controller from '../../../src/core/controllers/controller'
-import { Repository } from '../../../src/core/repositories'
-import Service from '../../../src/core/services/service'
+import { Controller } from '../../../src/domain/controllers'
+import { Repository } from '../../../src/domain/repositories'
+import Service from '../../../src/domain/services/service'
 import db from '../../testsUtils/db'
 
 interface Dummy extends Document {

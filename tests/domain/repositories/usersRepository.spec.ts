@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import * as bcrypt from 'bcrypt'
 import db from '../../testsUtils/db'
-import { UsersRepository } from '../../../src/core/repositories'
-import { User, UserModel } from '../../../src/core/models'
+import { UsersRepository } from '../../../src/domain/repositories'
+import { User, UserModel } from '../../../src/domain/models'
 import UserBuilder from '../../testsUtils/user'
 
 describe('UsersRepository', () => {

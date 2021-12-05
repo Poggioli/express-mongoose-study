@@ -5,7 +5,7 @@ import { advanceTo, clear } from 'jest-date-mock'
 import request from 'supertest'
 import Application from '../../../src/application'
 import Jwt from '../../../src/core/auth/jwt'
-import { User } from '../../../src/core/models'
+import { User } from '../../../src/domain/models'
 import db from '../../testsUtils/db'
 import UserBuilder from '../../testsUtils/user'
 

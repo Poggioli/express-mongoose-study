@@ -1,4 +1,4 @@
-import { Item } from '../../src/core/models'
+import { Item } from '../../src/domain/models'
 
 export default class ItemBuilder {
   private _name: string | undefined
