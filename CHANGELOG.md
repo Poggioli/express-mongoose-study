@@ -33,3 +33,9 @@
 ## Removed
 
 - endpoint GET - /users/email
+
+## [] version 2.1.0
+
+## Added
+
+- jwt validator and access level to role endpoint
