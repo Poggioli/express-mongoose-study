@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
+import { Jwt } from '../../src/core/auth'
 import { User } from '../../src/domain/models'
+import { CodeRoles } from '../../src/domain/models/rolesModel'
 
 export default class UserBuilder {
   private _name: string | undefined
@@ -55,4 +57,13 @@ export default class UserBuilder {
       roles: this._roles
     } as User
   }
+}
+
+export function createInvalidJwtRole(necessaryRoles: CodeRoles[], roles: { role: string, id: mongoose.Types.ObjectId }[]): string {
+  const user = new UserBuilder().roles(
+    roles.filter((r) => !necessaryRoles.some((nr) => nr === r.role))
+      .map((r) => r.id)
+  ).build()
+  const jwtString: string = new Jwt().createJwt(user)
+  return encodeURI('Bearer '.concat(jwtString))
 }

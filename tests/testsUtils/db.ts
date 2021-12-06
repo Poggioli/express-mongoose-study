@@ -39,15 +39,15 @@ class MongoD {
   }
 
   public async createDefaultUser(): Promise<void> {
-    const roles: mongoose.Types.ObjectId[] = await this.createRoles()
+    const roles: { role: string, id: mongoose.Types.ObjectId }[] = await this.createRoles()
     const document = new UserModel({
-      name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd', roles: [...roles]
+      name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd', roles: [...roles.map((r) => r.id)]
     })
     await document.save().then()
   }
 
-  public async createRoles(): Promise<mongoose.Types.ObjectId[]> {
-    const ids: mongoose.Types.ObjectId[] = []
+  public async createRoles(): Promise<{ role: string, id: mongoose.Types.ObjectId }[]> {
+    const ids: { role: string, id: mongoose.Types.ObjectId }[] = []
     const sysAdm = new RoleModel(new RoleBuilder()
       .name('SYSADM')
       .description('System Admistator')
@@ -74,13 +74,13 @@ class MongoD {
       .build())
     return sysAdm
       .save()
-      .then((r: Role) => ids.push(r._id))
+      .then((r: Role) => ids.push({ role: r.name, id: r._id }))
       .then(() => adm.save())
-      .then((r: Role) => ids.push(r._id))
+      .then((r: Role) => ids.push({ role: r.name, id: r._id }))
       .then(() => sysUser.save())
-      .then((r: Role) => ids.push(r._id))
+      .then((r: Role) => ids.push({ role: r.name, id: r._id }))
       .then(() => user.save())
-      .then((r: Role) => ids.push(r._id))
+      .then((r: Role) => ids.push({ role: r.name, id: r._id }))
       .then(() => ids)
   }
 }
