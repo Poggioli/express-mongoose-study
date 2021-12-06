@@ -1,17 +1,14 @@
-import {
-  Document, Model, model, Schema
-} from 'mongoose'
+import { Model, model, Schema } from 'mongoose'
+import { DefaultModel, defaultModelSchema } from './model'
 
-export interface Item extends Document {
+export interface Item extends DefaultModel {
   name: string,
   price: number,
-  description: string,
-  active?: boolean,
-  createdAt?: Date,
-  updatedAt?: Date
+  description: string
 }
 
 const itemSchema = new Schema<Item>({
+  ...defaultModelSchema.obj,
   name: {
     type: String,
     required: true,
@@ -27,10 +24,6 @@ const itemSchema = new Schema<Item>({
     required: true,
     trim: true,
     maxlength: 300
-  },
-  active: {
-    type: Boolean,
-    default: true
   }
 }, {
   timestamps: true
