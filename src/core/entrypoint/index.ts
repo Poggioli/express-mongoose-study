@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import {
-  Controller, ItemsController, RolesController, UsersController
+  Controller, GroupItemsController, ItemsController, RolesController, UsersController
 } from '@controllers'
 import { Router } from 'express'
 
@@ -9,7 +9,8 @@ const router = Router()
 const routes: Controller[] = [
   new ItemsController(router),
   new RolesController(router),
-  new UsersController(router)
+  new UsersController(router),
+  new GroupItemsController(router)
 ]
 
 routes.forEach((route) => {

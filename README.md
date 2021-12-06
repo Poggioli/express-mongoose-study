@@ -53,6 +53,14 @@ Endpoints `/v1`:
 - PUT `/roles/:id`
 - DELETE `/roles/:id`
 
+#### GroupItems
+
+- GET `/groupItems`
+- GET `/groupItems/:id`
+- POST `/groupItems`
+- PUT `/groupItems/:id`
+- DELETE `/groupItems/:id`
+
 ### Docker image
 
 To create a docker image of this app just run the follow command

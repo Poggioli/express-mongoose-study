@@ -39,3 +39,4 @@
 ## Added
 
 - jwt validator and access level to role endpoint
+- groupItems endpoint

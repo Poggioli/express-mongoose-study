@@ -27,6 +27,10 @@ const groupItemSchema = new Schema<GroupItem>({
       ref: 'Item'
     }],
     validate: [(v: any[]) => Array.isArray(v) && v.length > 0, '{PATH} is shorter than the minimum allowed length (1).']
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true
