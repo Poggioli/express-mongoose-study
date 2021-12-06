@@ -9,7 +9,7 @@
 - dockerfile and docker-compose
 - github actions CI
 
-## [] version 2.0.0
+## [2021-12-05] version 2.0.0
 
 ## Added
 
