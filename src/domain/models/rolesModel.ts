@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
-import {
-  Document, model, Model, Schema
-} from 'mongoose'
+import { model, Model, Schema } from 'mongoose'
+import { DefaultModel, defaultModelSchema } from './model'
 
 /**
  * SYSADM = U1lTQURN = 30
@@ -17,17 +16,15 @@ export enum CodeRoles {
   USER = 'VVNFUg=='
 }
 
-export interface Role extends Document {
+export interface Role extends DefaultModel {
   name: string,
   description: string,
   code: string,
-  access: number,
-  active: boolean,
-  createdAt?: Date,
-  updatedAt?: Date
+  access: number
 }
 
 export const roleSchema = new Schema<Role>({
+  ...defaultModelSchema.obj,
   name: {
     type: String,
     required: true,
@@ -47,10 +44,6 @@ export const roleSchema = new Schema<Role>({
   access: {
     type: Number,
     required: true
-  },
-  active: {
-    type: Boolean,
-    default: true
   }
 }, {
   timestamps: true

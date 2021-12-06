@@ -1,19 +1,17 @@
 /* eslint-disable func-names */
 /* eslint-disable no-useless-escape */
 import { NextFunction } from 'express'
-import mongoose, { Document, Model, Schema } from 'mongoose'
+import mongoose, { Model, Schema } from 'mongoose'
 import * as bcrypt from 'bcrypt'
 import environment from '@src/environment'
 import { Role } from './rolesModel'
+import { DefaultModel, defaultModelSchema } from './model'
 
-export interface User extends Document {
+export interface User extends DefaultModel {
   name: string,
   email: string,
   password: string,
-  roles: mongoose.Types.ObjectId[] | Role[]
-  active?: boolean,
-  createdAt?: Date,
-  updatedAt?: Date
+  roles: mongoose.Types.ObjectId[] | Role[],
   matches(password: string): boolean
 }
 
@@ -22,6 +20,7 @@ interface UserModelFindByEmail extends Model<User> {
 }
 
 const userSchema = new Schema<User>({
+  ...defaultModelSchema.obj,
   name: {
     type: String,
     required: true,
@@ -34,10 +33,6 @@ const userSchema = new Schema<User>({
     unique: true,
     // eslint-disable-next-line max-len
     match: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-  },
-  active: {
-    type: Boolean,
-    default: true
   },
   password: {
     type: String,
