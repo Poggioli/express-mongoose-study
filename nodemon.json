@@ -5,5 +5,5 @@
     ],
     "ext": ".ts,.js,.yml",
     "ignore": [],
-    "exec": "ts-node-dev -r tsconfig-paths/register --respawn --ignore-watch node_modules --no-notify --files ./src/index.ts"
+    "exec": "ts-node-dev --inspect -r tsconfig-paths/register --respawn --ignore-watch node_modules --no-notify --files ./src/index.ts"
 }
