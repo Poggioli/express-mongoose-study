@@ -1,5 +1,6 @@
 import { UserModel } from '@models'
 import { UsersService } from '@services'
+import { jwtValidator } from '@src/core/auth'
 import { handleDisableEndpoint } from '@src/core/handlers'
 import { Router } from 'express'
 import Controller from './controller'
@@ -15,6 +16,13 @@ export default class UsersController extends Controller {
 
   createCustomRouter(): void {
     this.authenticate()
+  }
+
+  protected updateHandlers(): any[] {
+    return [
+      jwtValidator(),
+      (this._service as UsersService).verifyIfCanUpdate()
+    ]
   }
 
   private authenticate(): void {

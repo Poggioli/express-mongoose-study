@@ -28,6 +28,7 @@
   - GET /roles
   - DELETE /roles/:id
 - added new property to User model, user needs the role to create new user
+- only the same user can update an user
 
 ## Removed
 

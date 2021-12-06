@@ -2,12 +2,14 @@
 import http from 'http'
 import { StatusCodes } from 'http-status-codes'
 import { advanceTo, clear } from 'jest-date-mock'
+import mongoose from 'mongoose'
 import request from 'supertest'
 import Application from '../../../src/application'
 import Jwt from '../../../src/core/auth/jwt'
 import { User } from '../../../src/domain/models'
 import db from '../../testsUtils/db'
 import UserBuilder from '../../testsUtils/user'
+import { jwtValid } from '../../testsUtils/jwt'
 
 describe('ItemsController', () => {
   let server: http.Server
@@ -24,6 +26,36 @@ describe('ItemsController', () => {
   afterAll(async () => {
     await db.disconnect()
     server.close()
+  })
+
+  describe('update', () => {
+    it(`Should return 401
+          When uses JWTValidator
+          And call the endpoint PUT /users/:id without JWT cookie`, async () => {
+      expect.assertions(1)
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+
+      await request(server)
+        .put('/v1/users/'.concat(id.toString()))
+        .then((result) => {
+          expect(result.statusCode).toBe(StatusCodes.UNAUTHORIZED)
+        })
+    })
+
+    it(`Should return 403
+        When uses verifyIfCanUpdate
+        And call the endpoint PUT /users/:id with users different`, async () => {
+      expect.assertions(2)
+      const otherUser = new UserBuilder().email('otherUser@email.com').build()
+      const idOtherUser: mongoose.Types.ObjectId = await request(server).post('/v1/users').send(otherUser).then((result) => result.body)
+      await request(server)
+        .put('/v1/users/'.concat(idOtherUser.toString()))
+        .set('Cookie', jwtValid)
+        .then((result) => {
+          expect(result.statusCode).toBe(StatusCodes.FORBIDDEN)
+          expect(result.body).toBe('You cannot update a user other than you')
+        })
+    })
   })
 
   it(`Should return statusCode 404

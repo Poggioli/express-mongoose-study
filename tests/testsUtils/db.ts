@@ -20,6 +20,7 @@ class MongoD {
   public async connect(): Promise<void> {
     const uri = this._mongod.getUri()
     await mongoose.connect(uri)
+    await this.createDefaultUser()
   }
 
   public async disconnect(): Promise<void> {
@@ -37,7 +38,7 @@ class MongoD {
     await this.createDefaultUser()
   }
 
-  private async createDefaultUser(): Promise<void> {
+  public async createDefaultUser(): Promise<void> {
     const roles: mongoose.Types.ObjectId[] = await this.createRoles()
     const document = new UserModel({
       name: 'JWT name', email: 'jwt@email.com', password: 'jwtPassowrd', roles: [...roles]

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import mongoose from 'mongoose'
 import { User } from '../../../src/domain/models'
@@ -15,6 +15,7 @@ describe('UsersService', () => {
   let spyResponseStatus: jest.SpyInstance
   let spyResponseSend: jest.SpyInstance
   let repository: UsersRepository
+  const next: NextFunction = jest.fn()
 
   beforeEach(() => {
     response = {
@@ -57,6 +58,69 @@ describe('UsersService', () => {
       expect(spyResponseJson).toHaveBeenCalledTimes(1)
       expect(spyResponseJson).toHaveBeenCalledWith(id.toString())
       expect(repository.insert).toHaveBeenCalledWith(userSended)
+    })
+  })
+
+  describe('verifyIfCanUpdate', () => {
+    it(`Should return statusCode 404
+        When the user to update don't exists`, async () => {
+      expect.assertions(4)
+      const user: User = new UserBuilder().build()
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      jest.spyOn(repository, 'findById').mockResolvedValueOnce(null);
+      (request as any) = {
+        user,
+        params: {
+          id: id.toString()
+        }
+      }
+
+      const call = await service.verifyIfCanUpdate()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('The user you try to to update don\'t exists')
+    })
+
+    it(`Should return statusCode 403
+        When you don't has access to update`, async () => {
+      expect.assertions(4)
+      const user: User = new UserBuilder().build()
+      const userToReturn: User = new UserBuilder().email('email@test.com.br').build()
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      jest.spyOn(repository, 'findById').mockResolvedValueOnce(userToReturn);
+      (request as any) = {
+        user,
+        params: {
+          id: id.toString()
+        }
+      }
+
+      const call = await service.verifyIfCanUpdate()
+      await call(request as Request, response as Response)
+      expect(spyResponseStatus).toHaveBeenCalledTimes(1)
+      expect(spyResponseStatus).toHaveBeenCalledWith(StatusCodes.FORBIDDEN)
+      expect(spyResponseJson).toHaveBeenCalledTimes(1)
+      expect(spyResponseJson).toHaveBeenCalledWith('You cannot update a user other than you')
+    })
+
+    it(`Should call next
+        When the user is the same user`, async () => {
+      expect.assertions(1)
+      const user: User = new UserBuilder().build()
+      const id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId()
+      jest.spyOn(repository, 'findById').mockResolvedValueOnce(user);
+      (request as any) = {
+        user,
+        params: {
+          id: id.toString()
+        }
+      }
+
+      const call = await service.verifyIfCanUpdate()
+      await call(request as Request, response as Response, next)
+      expect(next).toHaveBeenCalledTimes(1)
     })
   })
 
