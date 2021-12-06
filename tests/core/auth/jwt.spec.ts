@@ -1,5 +1,5 @@
 import { createHmac } from 'crypto'
-import Jwt from '../../../src/core/auth'
+import { Jwt } from '../../../src/core/auth'
 import environment from '../../../src/environment'
 
 describe('jwt', () => {

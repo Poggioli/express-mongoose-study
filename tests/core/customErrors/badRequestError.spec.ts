@@ -1,10 +1,11 @@
+import { StatusCodes } from 'http-status-codes'
 import { BadRequestError } from '../../../src/core/customErrors'
 
 describe('BadRequestError', () => {
   it(`Should return 400
       When call statusCode`, () => {
     const badRequestError: BadRequestError = new BadRequestError()
-    expect(badRequestError.statusCode).toBe(400)
+    expect(badRequestError.statusCode).toBe(StatusCodes.BAD_REQUEST)
   })
 
   it(`If not set message

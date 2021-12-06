@@ -2,6 +2,11 @@
 
 ---
 
+![Build](https://github.com/Poggioli/express-mongoose-study/actions/workflows/build.yml/badge.svg)
+![Lint](https://github.com/Poggioli/express-mongoose-study/actions/workflows/lint.yml/badge.svg)
+![Test](https://github.com/Poggioli/express-mongoose-study/actions/workflows/test.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/Poggioli/express-mongoose-study/badge.svg?branch=main)](https://coveralls.io/github/Poggioli/express-mongoose-study?branch=main)
+
 ## About the project
 
 This is a study project using the express and mongoose libraries, it aims to learn more about creating RESTFULL API's and about non-relational databases, it also serves to learn how to assemble a CI/CD pipeline using github Actions
@@ -29,16 +34,24 @@ Endpoints `/v1`:
 
 - GET `/items`
 - GET `/items/:id`
-- DELETE `items/:id`
 - POST `/items`
+- PUT `/items/:id`
+- DELETE `items/:id`
 
 #### Users
 
-- POST `/users`
-- GET `/users/email?email=`
 - GET `/users/:id`
-- DELETE `/users/:id`
+- POST `/users`
 - POST `/users/authenticate`
+- DELETE `/users/:id`
+
+#### Roles
+
+- GET `/roles`
+- GET `/roles/:id`
+- POST `/roles`
+- PUT `/roles/:id`
+- DELETE `/roles/:id`
 
 ### Docker image
 
@@ -49,7 +62,7 @@ docker build . -t express-mongoose-study &&
 docker run -p 3002:3002 express-mongoose-study
 ```
 
-The application will respond on port 3002, to test if it went up correctly, just access [health endpoint](localhost:3002/health)
+The application will respond on port 3002, to test if it went up correctly, just access [health endpoint](http://localhost:3002/health)
 
 ### Getting started
 
