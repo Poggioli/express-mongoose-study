@@ -4,12 +4,12 @@ import { User } from './usersModel'
 import { Item } from './itemsModel'
 import { DefaultModel, defaultModelSchema } from './model'
 
-enum StateType {
+export enum StateType {
   READY = 'READY',
   FREEZE = 'FREEZE'
 }
 
-enum Status {
+export enum Status {
   ACCEPTED = 'ACCEPTED',
   STARTED = 'STARTED',
   CANCELED = 'CANCELED',
@@ -47,7 +47,7 @@ const orderSchema = new Schema<Order>({
   },
   observation: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     maxlength: 300
   },
@@ -56,7 +56,7 @@ const orderSchema = new Schema<Order>({
     validate: [(v: Date) => {
       const todayWithoutHour: Date = new Date()
       todayWithoutHour.setHours(0, 0, 0, 0)
-      return v.getTime() >= todayWithoutHour.getTime()
+      return !v ? false : v.getTime() >= todayWithoutHour.getTime()
     }, '{PATH} should be today or next days.']
   },
   stateType: {
