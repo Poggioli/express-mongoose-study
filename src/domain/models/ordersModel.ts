@@ -57,7 +57,7 @@ const orderSchema = new Schema<Order>({
       const todayWithoutHour: Date = new Date()
       todayWithoutHour.setHours(0, 0, 0, 0)
       return v.getTime() >= todayWithoutHour.getTime()
-    }, '{PATH} should be today or next days']
+    }, '{PATH} should be today or next days.']
   },
   stateType: {
     type: String,
