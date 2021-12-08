@@ -53,10 +53,11 @@ const orderSchema = new Schema<Order>({
   },
   scheduledAt: {
     type: Date,
+    required: true,
     validate: [(v: Date) => {
       const todayWithoutHour: Date = new Date()
       todayWithoutHour.setHours(0, 0, 0, 0)
-      return !v ? false : v.getTime() >= todayWithoutHour.getTime()
+      return v instanceof Date && v.getTime() >= todayWithoutHour.getTime()
     }, '{PATH} should be today or next days.']
   },
   stateType: {

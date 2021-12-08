@@ -96,14 +96,13 @@ describe('OrdersRepository', () => {
       })
 
       describe('scheduledAt', () => {
-        // ToDo fix this test
-        xit(`Should throw an error
+        it(`Should throw an error
             When scheduledAt is not present`, async () => {
           expect.assertions(1)
           const order = new OrderBuilder().scheduledAt(undefined).build()
           await expect(repository.insert(order).then())
             .rejects
-            .toThrow('ValidationError: scheduledAt: scheduledAt should be today or next days.')
+            .toThrow('ValidationError: scheduledAt: Path `scheduledAt` is required.')
         })
 
         it(`Should throw an error
